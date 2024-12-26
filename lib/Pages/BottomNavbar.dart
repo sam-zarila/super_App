@@ -8,9 +8,16 @@ class Bottomnavbar extends StatefulWidget {
 }
 
 class _BottomnavbarState extends State<Bottomnavbar> {
+  int _selectedIndex = 0;
 
+  final List<Widget> _pages = [];
 
-  
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
