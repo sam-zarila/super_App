@@ -10,7 +10,14 @@ class Bottomnavbar extends StatefulWidget {
 class _BottomnavbarState extends State<Bottomnavbar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [];
+  // Add your pages here
+  final List<Widget> _pages = [
+    Center(child: Text('Home Page')), // Replace with actual page widgets
+    Center(child: Text('MarketPlace Page')),
+    Center(child: Text('Expert Page')),
+    Center(child: Text('ResourceHub Page')),
+    Center(child: Text('Profile Page')),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -70,22 +77,22 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     final bool isSelected = _selectedIndex == index;
 
     return BottomNavigationBarItem(
-        icon: AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInCubic,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.grey.withOpacity(0.2) : Colors.transparent,
-        shape: BoxShape.circle
+      icon: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInCubic,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color:
+              isSelected ? Colors.grey.withOpacity(0.2) : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          icon,
+          color: isSelected ? Colors.orange : Colors.grey[400],
+          size: isSelected ? 28 : 24,
+        ),
       ),
-      child: Icon(
-        icon,
-        color: isSelected ? Colors.orange: Colors.grey[400],
-        size:  isSelected ? 28 : 24,
-      ),
-    ),
-    label: label
-    
+      label: label,
     );
   }
 }
