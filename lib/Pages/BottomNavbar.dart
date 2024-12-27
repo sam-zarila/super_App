@@ -10,7 +10,7 @@ class Bottomnavbar extends StatefulWidget {
 class _BottomnavbarState extends State<Bottomnavbar> {
   int _selectedIndex = 0;
 
-  // Add your pages here
+  
   final List<Widget> _pages = [
     Center(child: Text('Home Page')), // Replace with actual page widgets
     Center(child: Text('MarketPlace Page')),
