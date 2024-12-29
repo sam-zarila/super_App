@@ -48,7 +48,7 @@ class MalawiSuperAppPage extends StatelessWidget {
 
   Widget _buildDrawer() {
     return Drawer(
-      backgroundColor: Colors.green,
+    
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

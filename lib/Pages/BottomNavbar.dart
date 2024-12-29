@@ -14,6 +14,10 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   
   final List<Widget> _pages = [
     MalawiSuperAppPage(),
+     Placeholder(),        
+    Placeholder(),       
+    Placeholder(),        
+    Placeholder(),        
    
   ];
 
