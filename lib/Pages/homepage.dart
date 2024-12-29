@@ -210,10 +210,10 @@ class MalawiSuperAppPage extends StatelessWidget {
 
 Widget _buildShoeSection() {
   final List<Map<String, String>> shoeData = [
-    {'image': 'assets/shoes/airforce.jpg', 'name': 'Air Force', 'price': '120.00'},
-    {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150.00'},
-    {'image': 'assets/shoes/converse.jpg', 'name': 'Converse', 'price': '100.00'},
-    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '130.00'},
+    {'image': 'assets/shoes/airforce.jpg', 'name': 'Air Force', 'price': '120,000'},
+    {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150,000'},
+    {'image': 'assets/shoes/converse.jpg', 'name': 'Converse', 'price': '30,0000'},
+    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,00'},
   ];
 
   return Column(
@@ -240,7 +240,7 @@ Widget _buildShoeSection() {
             imageUrl: shoeData[index]['image']!,
             name: shoeData[index]['name']!,
             price: shoeData[index]['price']!,
-            isFavorite: index % 2 == 0,
+           
           );
         },
       ),
@@ -276,96 +276,116 @@ Widget _buildShoeSection() {
     );
   }
 }
+
+
 class ShoeCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String price;
-  final bool isFavorite;
 
   const ShoeCard({
+    Key? key,
     required this.imageUrl,
     required this.name,
     required this.price,
-    this.isFavorite = false,
-    Key? key,
   }) : super(key: key);
+
+  void _showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Choose an Action',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.shopping_cart, color: Colors.green),
+                title: const Text('Add to Cart'),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('$name added to cart')),
+                  );
+                  // Add your add-to-cart logic here
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.payment, color: Colors.blue),
+                title: const Text('Buy Now'),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Proceeding to buy $name')),
+                  );
+                  // Add your buy-now logic here
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Image
-            Stack(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.asset(
+              imageUrl,
+              height: 150,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                      colors: [Colors.pink[100]!, Colors.blue[100]!],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  child: Image.asset(
-                    imageUrl, // Replace with your asset path or network image
-                    fit: BoxFit.contain,
-                  ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "\$${price}",
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ],
                 ),
-                if (isFavorite)
-                  const Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Icon(Icons.favorite, color: Colors.red, size: 18),
-                  )
-                else
-                  const Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Icon(Icons.favorite_border, color: Colors.grey, size: 18),
-                  ),
+                GestureDetector(
+                  onTap: () => _showOptions(context),
+                  child: const Icon(Icons.add_circle, color: Colors.blue),
+                ),
               ],
             ),
-            const SizedBox(height: 10),
-            // Name
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Price
-            Text(
-              '\$$price',
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.green,
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Add to Cart Button
-            ElevatedButton(
-              onPressed: () {
-                // Add to cart functionality
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(10),
-              ),
-              child: const Icon(Icons.add, color: Colors.white),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
