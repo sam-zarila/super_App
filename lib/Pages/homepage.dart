@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class MalawiSuperAppPage extends StatelessWidget {
+  const MalawiSuperAppPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +42,7 @@ class MalawiSuperAppPage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildCategoryList(),
               const SizedBox(height: 20),
-              _buildSectionTitle("About the App", () {}),
-              const SizedBox(height: 10),
-              _buildContentSection(),
+           
             ],
           ),
         ),
@@ -123,7 +123,7 @@ class MalawiSuperAppPage extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: 60,
+      height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
@@ -131,13 +131,16 @@ class MalawiSuperAppPage extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.grey[200],
                   child: Icon(categories[index]['icon'], color: Colors.black),
                 ),
                 const SizedBox(height: 5),
-                Text(categories[index]['name']),
+                Text(categories[index]['name'],
+                
+                style: TextStyle(fontSize: 12),),
               ],
             ),
           );
@@ -162,89 +165,7 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContentSection() {
-    final List<Map<String, String>> features = [
-      {
-        'title': "E-Commerce & Marketplace",
-        'description':
-            "A platform for users to shop for products ranging from groceries to electronics. Features local businesses, artisans, and farmers to promote 'Buy Malawi Build Malawi.'"
-      },
-      {
-        'title': "Digital Payments",
-        'description':
-            "Integrated mobile money options (Airtel Money, Mpamba). Support for PayChangu or similar gateways for seamless in-app transactions."
-      },
-      {
-        'title': "Transportation & Logistics",
-        'description':
-            "Ride-hailing services (boda bodas, taxis). Courier services for package delivery and logistics solutions."
-      },
-      {
-        'title': "Bill Payments & Utilities",
-        'description':
-            "Utility bill payments for electricity, water, and airtime recharges. Options for school fees or rent payments."
-      },
-      {
-        'title': "Food & Grocery Delivery",
-        'description':
-            "Partnerships with local restaurants and markets to enable food delivery. Grocery shopping with same-day delivery options."
-      },
-      {
-        'title': "Banking & Financial Services",
-        'description':
-            "Integration with banks for mobile banking and micro-lending services. Savings and investment opportunities tailored to low-income groups."
-      },
-      {
-        'title': "Social & Community Engagement",
-        'description':
-            "Forums for local events, news updates, and community discussions. Integration with social networks to connect users with common interests."
-      },
-      {
-        'title': "Education & Skill Development",
-        'description':
-            "Online courses, tutorials, and resources for personal and professional development. Partnership with educational institutions for enrollment and e-learning."
-      },
-      {
-        'title': "Health & Wellness",
-        'description':
-            "Telemedicine services for virtual doctor consultations. Pharmacy delivery services and health information resources."
-      },
-    ];
-
-    return Column(
-      children: features.map((feature) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Card(
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    feature['title']!,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    feature['description']!,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
+ 
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(

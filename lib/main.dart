@@ -4,7 +4,7 @@ import 'Pages/BottomNavbar.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: Bottomnavbar(),
   ));
 }

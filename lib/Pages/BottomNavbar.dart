@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'homepage.dart';
 
 class Bottomnavbar extends StatefulWidget {
   const Bottomnavbar({super.key});
@@ -12,11 +13,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
   
   final List<Widget> _pages = [
-    Center(child: Text('Home Page')), // Replace with actual page widgets
-    Center(child: Text('MarketPlace Page')),
-    Center(child: Text('Expert Page')),
-    Center(child: Text('ResourceHub Page')),
-    Center(child: Text('Profile Page')),
+    MalawiSuperAppPage(),
+   
   ];
 
   void _onItemTapped(int index) {
