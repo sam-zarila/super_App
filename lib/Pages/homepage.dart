@@ -12,8 +12,8 @@ class MalawiSuperAppPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           "Malawi Super App",
-          style: TextStyle(color: Colors.orange, fontSize: 22),
-          
+          style: TextStyle(
+              color: Colors.orange, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -44,12 +44,35 @@ class MalawiSuperAppPage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildCategoryList(),
               const SizedBox(height: 20),
-           
             ],
           ),
         ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: const [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.orange
+            ),
+            
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                CircleAvatar(
+                  
+                )
+              ],
+            ) )
+        ],
+      ),
     );
   }
 
@@ -140,9 +163,10 @@ class MalawiSuperAppPage extends StatelessWidget {
                   child: Icon(categories[index]['icon'], color: Colors.black),
                 ),
                 const SizedBox(height: 5),
-                Text(categories[index]['name'],
-                
-                style: TextStyle(fontSize: 12),),
+                Text(
+                  categories[index]['name'],
+                  style: TextStyle(fontSize: 12),
+                ),
               ],
             ),
           );
@@ -166,8 +190,6 @@ class MalawiSuperAppPage extends StatelessWidget {
       ],
     );
   }
-
- 
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
