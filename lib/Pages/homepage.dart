@@ -18,14 +18,14 @@ class MalawiSuperAppPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.grey),
+            icon: const Icon(Icons.notifications, color: Colors.green),
             onPressed: () {},
           ),
           CircleAvatar(
             radius: 18,
             backgroundColor: Colors.grey[200],
             child: IconButton(
-              icon: const Icon(Icons.person, color: Colors.grey),
+              icon: const Icon(Icons.person, color: Colors.green),
               onPressed: () {},
             ),
           ),
