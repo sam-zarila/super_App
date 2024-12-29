@@ -202,7 +202,7 @@ class MalawiSuperAppPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.grey[200],
-                  child: Icon(categories[index]['icon'], color: Colors.black),
+                  child: Icon(categories[index]['icon'], color: Colors.orange),
                 ),
                 const SizedBox(height: 5),
                 Text(
