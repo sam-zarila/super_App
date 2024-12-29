@@ -21,7 +21,6 @@ class MalawiSuperAppPage extends StatelessWidget {
             icon: const Icon(Icons.notifications, color: Colors.green),
             onPressed: () {},
           ),
-      
           const SizedBox(width: 10),
         ],
       ),
@@ -38,6 +37,7 @@ class MalawiSuperAppPage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildCategoryList(),
               const SizedBox(height: 20),
+              _buildShoeSection(), // Add Shoe Section here
             ],
           ),
         ),
@@ -48,71 +48,61 @@ class MalawiSuperAppPage extends StatelessWidget {
 
   Widget _buildDrawer() {
     return Drawer(
-    
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.orange
-            ),
-            
+            decoration: BoxDecoration(color: Colors.orange),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person ,color: Colors.green, size: 30,),
+                  child: Icon(Icons.person, color: Colors.green, size: 30),
                 ),
-                SizedBox(height: 10,),
-                Text('Hello, User',
-                   style: TextStyle(color: Colors.white, fontSize: 18),
+                SizedBox(height: 10),
+                Text(
+                  'Hello, User',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-                Text('user@example.com',
-                 style: TextStyle(color: Colors.white70, fontSize: 14),
+                Text(
+                  'user@example.com',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 )
               ],
-            ) 
             ),
-            ListTile(
-              leading:  const Icon(Icons.home),
-              title:  const Text('Home'),
-              onTap: () {
-                
-              },
-            ),
-             ListTile(
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('Shop'),
-              onTap: () {
-             },
-            ),
-             ListTile(
-              leading: const Icon(Icons.currency_exchange),
-              title: const Text('Currency'),
-              onTap: () {
-             },
-            ),
-             ListTile(
-              leading: const Icon(Icons.contact_support_outlined),
-              title: const Text('Help'),
-              onTap: () {
-             },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-             },
-            ),
-             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-             },
-            )
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Shop'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.currency_exchange),
+            title: const Text('Currency'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.contact_support_outlined),
+            title: const Text('Help'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {},
+          )
         ],
       ),
     );
@@ -217,17 +207,35 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title, VoidCallback onViewAll) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildShoeSection() {
+    // ShoeCard widget integration here
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        const SizedBox(height: 10),
+        const Text(
+          "Featured Shoes",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        TextButton(
-          onPressed: onViewAll,
-          child: const Text("Learn More"),
+        const SizedBox(height: 10),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 0.7,
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            return ShoeCard(
+              imageUrl: 'assets/shoes/shoe_${index + 1}.png', // Replace with your images
+              name: 'Shoe ${index + 1}',
+              price: '${(index + 1) * 25}.00',
+              isFavorite: index % 2 == 0,
+            );
+          },
         ),
       ],
     );
@@ -257,6 +265,100 @@ class MalawiSuperAppPage extends StatelessWidget {
           label: "Help",
         ),
       ],
+    );
+  }
+}
+class ShoeCard extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final String price;
+  final bool isFavorite;
+
+  const ShoeCard({
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+    this.isFavorite = false,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Image
+            Stack(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: LinearGradient(
+                      colors: [Colors.pink[100]!, Colors.blue[100]!],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Image.asset(
+                    imageUrl, // Replace with your asset path or network image
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                if (isFavorite)
+                  const Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Icon(Icons.favorite, color: Colors.red, size: 18),
+                  )
+                else
+                  const Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Icon(Icons.favorite_border, color: Colors.grey, size: 18),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // Name
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Price
+            Text(
+              '\$$price',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Add to Cart Button
+            ElevatedButton(
+              onPressed: () {
+                // Add to cart functionality
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(10),
+              ),
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
