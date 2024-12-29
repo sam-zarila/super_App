@@ -207,7 +207,7 @@ class MalawiSuperAppPage extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   categories[index]['name'],
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12, color: Colors.green),
                 ),
               ],
             ),
