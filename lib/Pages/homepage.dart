@@ -210,9 +210,9 @@ class MalawiSuperAppPage extends StatelessWidget {
 
 Widget _buildShoeSection() {
   final List<Map<String, String>> shoeData = [
-    {'image': 'assets/shoes/airforce.jpg', 'name': 'Air Force', 'price': '120,000'},
+    {'image': 'assets/shoes/airforce.jpg', 'name': 'iphone 12 pro max', 'price': '850,000'},
     {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150,000'},
-    {'image': 'assets/shoes/converse.jpg', 'name': 'Converse', 'price': '30,0000'},
+    {'image': 'assets/shoes/converse.jpg', 'name': 'classic jersey', 'price': '30,0000'},
     {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,00'},
   ];
 
@@ -221,7 +221,7 @@ Widget _buildShoeSection() {
     children: [
       const SizedBox(height: 10),
       const Text(
-        "Featured Shoes",
+        "Latest Arrivals",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       const SizedBox(height: 10),
@@ -325,7 +325,7 @@ class ShoeCard extends StatelessWidget {
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.payment, color: Colors.blue),
-                title: const Text('Buy Now'),
+                title: const Text('more details'),
                 onTap: () {
                   Navigator.pop(context); // Close the bottom sheet
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -372,9 +372,9 @@ class ShoeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "\$${price}",
+                      "\$mwk{price}",
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600),
+                          fontSize: 14, fontWeight: FontWeight.w600, color: Colors.greenAccent),
                     ),
                   ],
                 ),
