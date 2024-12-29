@@ -25,6 +25,7 @@ class MalawiSuperAppPage extends StatelessWidget {
           const SizedBox(width: 10),
         ],
       ),
+      drawer: _buildDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -47,6 +48,7 @@ class MalawiSuperAppPage extends StatelessWidget {
 
   Widget _buildDrawer() {
     return Drawer(
+      backgroundColor: Colors.green,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -100,6 +102,12 @@ class MalawiSuperAppPage extends StatelessWidget {
              },
             ),
             ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+             },
+            ),
+             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
