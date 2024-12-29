@@ -12,8 +12,10 @@ class MalawiSuperAppPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           "Malawi Super App",
-          style: TextStyle(color: Colors.black, fontSize: 22),
+          style: TextStyle(color: Colors.orange, fontSize: 22),
+          
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.grey),
