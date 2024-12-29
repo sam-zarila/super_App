@@ -371,9 +371,9 @@ class ShoeCard extends StatelessWidget {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 5),
-                    Text(
+                    const Text(
                       "\$mwk{price}",
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600, color: Colors.greenAccent),
                     ),
                   ],
