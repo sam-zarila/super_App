@@ -49,8 +49,8 @@ class MalawiSuperAppPage extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: const [
-          DrawerHeader(
+        children: [
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.orange
             ),
@@ -63,9 +63,48 @@ class MalawiSuperAppPage extends StatelessWidget {
                   radius: 30,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.person ,color: Colors.green, size: 30,),
+                ),
+                SizedBox(height: 10,),
+                Text('Hello, User',
+                   style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                Text('user@example.com',
+                 style: TextStyle(color: Colors.white70, fontSize: 14),
                 )
               ],
-            ) )
+            ) 
+            ),
+            ListTile(
+              leading:  const Icon(Icons.home),
+              title:  const Text('Home'),
+              onTap: () {
+                
+              },
+            ),
+             ListTile(
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Shop'),
+              onTap: () {
+             },
+            ),
+             ListTile(
+              leading: const Icon(Icons.currency_exchange),
+              title: const Text('Currency'),
+              onTap: () {
+             },
+            ),
+             ListTile(
+              leading: const Icon(Icons.contact_support_outlined),
+              title: const Text('Help'),
+              onTap: () {
+             },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+             },
+            )
         ],
       ),
     );
@@ -93,7 +132,7 @@ class MalawiSuperAppPage extends StatelessWidget {
           height: 45,
           width: 45,
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.orange,
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(Icons.filter_list, color: Colors.white),
@@ -160,7 +199,7 @@ class MalawiSuperAppPage extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   categories[index]['name'],
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             ),
