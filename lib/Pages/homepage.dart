@@ -11,7 +11,7 @@ class MalawiSuperAppPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text(
-          "Malawi Super App",
+          "uniConnect Malawi",
           style: TextStyle(
               color: Colors.orange, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -48,6 +48,7 @@ class MalawiSuperAppPage extends StatelessWidget {
 
   Widget _buildDrawer() {
     return Drawer(
+      backgroundColor: Colors.green,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
