@@ -64,6 +64,10 @@ flutter:
     - assets/banner1.jpg
     - assets/banner2.jpg
     - assets/banner3.jpg
+    - assets/shoes/airforce.jpg
+    - assets/shoes/timberland.jpg
+    - assets/shoes/converse.jpg
+    - assets/shoes/airmax.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-assets

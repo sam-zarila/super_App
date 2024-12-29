@@ -207,39 +207,46 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildShoeSection() {
-    // ShoeCard widget integration here
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        const Text(
-          "Featured Shoes",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+Widget _buildShoeSection() {
+  final List<Map<String, String>> shoeData = [
+    {'image': 'assets/shoes/airforce.jpg', 'name': 'Air Force', 'price': '120.00'},
+    {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150.00'},
+    {'image': 'assets/shoes/converse.jpg', 'name': 'Converse', 'price': '100.00'},
+    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '130.00'},
+  ];
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 10),
+      const Text(
+        "Featured Shoes",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 10),
+      GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.7,
         ),
-        const SizedBox(height: 10),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 0.7,
-          ),
-          itemCount: 6,
-          itemBuilder: (context, index) {
-            return ShoeCard(
-              imageUrl: 'assets/shoes/shoe_${index + 1}.png', // Replace with your images
-              name: 'Shoe ${index + 1}',
-              price: '${(index + 1) * 25}.00',
-              isFavorite: index % 2 == 0,
-            );
-          },
-        ),
-      ],
-    );
-  }
+        itemCount: shoeData.length,
+        itemBuilder: (context, index) {
+          return ShoeCard(
+            imageUrl: shoeData[index]['image']!,
+            name: shoeData[index]['name']!,
+            price: shoeData[index]['price']!,
+            isFavorite: index % 2 == 0,
+          );
+        },
+      ),
+    ],
+  );
+}
+
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
