@@ -21,14 +21,7 @@ class MalawiSuperAppPage extends StatelessWidget {
             icon: const Icon(Icons.notifications, color: Colors.green),
             onPressed: () {},
           ),
-          CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.grey[200],
-            child: IconButton(
-              icon: const Icon(Icons.person, color: Colors.green),
-              onPressed: () {},
-            ),
-          ),
+      
           const SizedBox(width: 10),
         ],
       ),
@@ -67,7 +60,9 @@ class MalawiSuperAppPage extends StatelessWidget {
 
               children: [
                 CircleAvatar(
-                  
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person ,color: Colors.green, size: 30,),
                 )
               ],
             ) )
