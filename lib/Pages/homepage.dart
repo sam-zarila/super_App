@@ -412,9 +412,7 @@ Widget _buildShoeSection() {
     ],
   );
 }
-
-
-  Widget _buildBottomNavigationBar() {
+ Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: 0,
       onTap: (index) {},
@@ -442,6 +440,9 @@ Widget _buildShoeSection() {
   }
 }
 
+
+
+ 
 
 class ShoeCard extends StatelessWidget {
   final String imageUrl;

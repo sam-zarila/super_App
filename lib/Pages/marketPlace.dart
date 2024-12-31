@@ -17,6 +17,37 @@ class _MarketPageState extends State<MarketPage> {
     itemsFuture = marketplaceService.fetchMarketItems();
   }
 
+  // Function to show options for the item when clicked
+  void _showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.add_shopping_cart),
+              title: Text("Add to Cart"),
+              onTap: () {
+                // Handle add to cart functionality
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.favorite),
+              title: Text("view details"),
+              onTap: () {
+                // Handle add to favorites functionality
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,18 +55,18 @@ class _MarketPageState extends State<MarketPage> {
       appBar: AppBar(
         title: const Text(
           "Market Place",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
             onPressed: () {
               // Handle filter functionality
             },
-            icon: Icon(Icons.filter_list, color: Colors.black),
+            icon: const Icon(Icons.filter_list, color: Colors.black),
           ),
         ],
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 2,
       ),
       body: FutureBuilder<List<MarketPlaceModel>>(
         future: itemsFuture,
@@ -55,65 +86,60 @@ class _MarketPageState extends State<MarketPage> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 2 / 3,
+                  childAspectRatio: 0.7,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final item = items[index];
                   return Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Stack(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            item.image,
+                            height: 150,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12),
-                                ),
-                                child: Image.network(
-                                  item.image,
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    "MWK ${item.price}",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.green),
+                                  ),
+                                ],
                               ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: IconButton(
-                                  onPressed: () {
-                                    // Handle favorite functionality
-                                  },
-                                  icon: Icon(Icons.favorite_border),
-                                  color: Colors.red,
+                              GestureDetector(
+                                onTap: () => _showOptions(context),
+                                child: const Icon(
+                                  Icons.add_circle,
+                                  color: Colors.redAccent,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            item.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            "\mwk${item.price}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
                           ),
                         ),
                       ],
@@ -128,4 +154,3 @@ class _MarketPageState extends State<MarketPage> {
     );
   }
 }
-
