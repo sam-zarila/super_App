@@ -11,10 +11,10 @@ import 'package:super_app/Pages/Toship.dart';
 import 'package:super_app/Pages/accomodation.dart';
 import 'package:super_app/Pages/address.dart';
 import 'package:super_app/Pages/food.dart';
-import 'package:super_app/Pages/latestArrival.dart';
 import 'package:super_app/Pages/random.dart';
 import 'package:super_app/Pages/social.dart';
 import 'package:super_app/Pages/utility.dart';
+import '../Pages/Home/Latest_page.dart';
 
 class MalawiSuperAppPage extends StatelessWidget {
   const MalawiSuperAppPage({super.key});

@@ -1,24 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:super_app/models/marketplace.model.dart';
-import 'package:super_app/services/marketplace.service.dart';
 
-class MarketPage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import '../../models/Latest_model.dart';
+import '../../services/latest_Services.dart';
+
+class LatestArrivalPage extends StatefulWidget {
+  const LatestArrivalPage({super.key});
+
   @override
-  _MarketPageState createState() => _MarketPageState();
+  State<LatestArrivalPage> createState() => _LatestArrivalPageState();
 }
 
-class _MarketPageState extends State<MarketPage> {
-  final MarketplaceService marketplaceService = MarketplaceService();
-  late Future<List<MarketPlaceModel>> itemsFuture;
+class _LatestArrivalPageState extends State<LatestArrivalPage> {
+  final LatestArrivalServices _latestArrivalServices = LatestArrivalServices();
+  late Future<List<LatestArrivalModels>> itemsFuture;
 
   @override
   void initState() {
     super.initState();
-    itemsFuture = marketplaceService.fetchMarketItems();
+    itemsFuture = _latestArrivalServices.fetchLatestArrivals();
   }
-
-  // Function to show options for the item when clicked
-  void _showOptions(BuildContext context) {
+   void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) => Container(
@@ -48,6 +49,7 @@ class _MarketPageState extends State<MarketPage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +70,7 @@ class _MarketPageState extends State<MarketPage> {
         backgroundColor: Colors.white,
         elevation: 2,
       ),
-      body: FutureBuilder<List<MarketPlaceModel>>(
+      body: FutureBuilder<List<LatestArrivalModels>>(
         future: itemsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
