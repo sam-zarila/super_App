@@ -17,6 +17,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
+    // Fetch item details based on the passed itemId
     _itemDetails = MarketplaceService().getItemDetails(widget.itemId);
   }
 
@@ -25,6 +26,8 @@ class _DetailsPageState extends State<DetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Item Details'),
+        backgroundColor: Colors.white,
+        elevation: 2,
       ),
       body: FutureBuilder<MarketplaceDetailModel?>(
         future: _itemDetails,
@@ -45,54 +48,47 @@ class _DetailsPageState extends State<DetailsPage> {
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Left side: Image
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(item.image),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
+                // Image at the top
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    item.image,
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(width: 16),
-                // Right side: Name, Price, and Description
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Item Name
-                      Text(
-                        item.name,
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      // Item Price
-                      Text(
-                        'Price: MWK ${item.price.toStringAsFixed(2)}',
-                        style: TextStyle(fontSize: 20, color: Colors.green),
-                      ),
-                      SizedBox(height: 16),
-                      // Item Description
-                      Text(
-                        'Description of the item goes here. This can be a detailed explanation about the product, including its features, specifications, and other relevant details.',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Spacer(),
-                      // Button to add item to cart
-                      ElevatedButton(
-                        onPressed: () {
-                          // Add functionality for adding to cart
-                        },
-                        child: Text('Add to Cart'),
-                      ),
-                    ],
-                  ),
+                SizedBox(height: 16),
+
+                // Name and Price below the image
+                Text(
+                  item.name,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Price: MWK ${item.price.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 20, color: Colors.green),
+                ),
+                SizedBox(height: 16),
+
+                // Description below the price
+                Text(
+                  item.description, // Assuming description is part of MarketplaceDetailModel
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+
+                // Button to add item to cart
+                ElevatedButton(
+                  onPressed: () {
+                    // Add functionality for adding to cart
+                    print('Item added to cart');
+                  },
+                  child: Text('Add to Cart'),
                 ),
               ],
             ),

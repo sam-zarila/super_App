@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_app/models/marketplace.model.dart';
 import 'package:super_app/services/marketplace.service.dart';
+ import '../Pages/Home/view_detailsPage.dart';
 
 class MarketPage extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _MarketPageState extends State<MarketPage> {
   }
 
   // Function to show options for the item when clicked
-  void _showOptions(BuildContext context) {
+  void _showOptions(BuildContext context, MarketPlaceModel item) {
     showModalBottomSheet(
       context: context,
       builder: (context) => Container(
@@ -36,10 +37,16 @@ class _MarketPageState extends State<MarketPage> {
             ),
             ListTile(
               leading: Icon(Icons.details),
-              title: Text("view details"),
+              title: Text("View Details"),
               onTap: () {
-                // Handle add to favorites functionality
                 Navigator.pop(context);
+                // Navigate to the details page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsPage(itemId: item.id),
+                  ),
+                );
               },
             ),
           ],
@@ -133,7 +140,7 @@ class _MarketPageState extends State<MarketPage> {
                                 ],
                               ),
                               GestureDetector(
-                                onTap: () => _showOptions(context),
+                                onTap: () => _showOptions(context, item),
                                 child: const Icon(
                                   Icons.add_circle,
                                   color: Colors.redAccent,
