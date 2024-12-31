@@ -50,6 +50,19 @@ class MalawiSuperAppPage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildBannerSlider(),
               const SizedBox(height: 20),
+             const Center(
+
+              child:  Text(
+                'Discover Our Services',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green
+                ),
+                
+              ),
+             ),
+             const SizedBox(height: 20),
               _buildCategoryList(context),
               const SizedBox(height: 20),
               _buildShoeSection(), 
@@ -337,6 +350,7 @@ class MalawiSuperAppPage extends StatelessWidget {
           },
           child: Column(
             children: [
+              
               CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.orange,
