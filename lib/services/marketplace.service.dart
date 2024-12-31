@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/marketplace.model.dart';
 
 class MarketplaceService {
-  final String _baseUrl = '';
+  final String _baseUrl = 'http://127.0.0.1:3000/marketplace';
 
   Future<List<MarketPlaceModel>> fetchMarketItems() async {
     try {
