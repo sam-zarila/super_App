@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:super_app/Pages/Edu.dart';
+import 'package:super_app/Pages/Health.dart';
+import 'package:super_app/Pages/MobileMoney.dart';
+import 'package:super_app/Pages/Taxi.dart';
+import 'package:super_app/Pages/ToRefund.dart';
+import 'package:super_app/Pages/Topay.dart';
+import 'package:super_app/Pages/Toreceive.dart';
+import 'package:super_app/Pages/Toship.dart';
+import 'package:super_app/Pages/accomodation.dart';
+import 'package:super_app/Pages/address.dart';
+import 'package:super_app/Pages/food.dart';
+import 'package:super_app/Pages/latestArrival.dart';
+import 'package:super_app/Pages/random.dart';
+import 'package:super_app/Pages/social.dart';
+import 'package:super_app/Pages/utility.dart';
 
 class MalawiSuperAppPage extends StatelessWidget {
   const MalawiSuperAppPage({super.key});
@@ -24,7 +39,7 @@ class MalawiSuperAppPage extends StatelessWidget {
           const SizedBox(width: 10),
         ],
       ),
-      drawer: _buildDrawer(),
+      drawer: _buildDrawer(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -35,9 +50,21 @@ class MalawiSuperAppPage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildBannerSlider(),
               const SizedBox(height: 20),
-              _buildCategoryList(),
+              _buildCategoryList(context),
               const SizedBox(height: 20),
-              _buildShoeSection(), // Add Shoe Section here
+              _buildShoeSection(), 
+               ElevatedButton(onPressed: (){},
+                child: const Text(
+                  'View More',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange
+                  ),
+                ))
+      
+      
+              
             ],
           ),
         ),
@@ -46,7 +73,7 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawer() {
+  Widget _buildDrawer(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.green,
       child: ListView(
@@ -70,40 +97,77 @@ class MalawiSuperAppPage extends StatelessWidget {
                 Text(
                   'user@example.com',
                   style: TextStyle(color: Colors.white70, fontSize: 14),
-                )
+                ),
               ],
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            leading: const Icon(Icons.payment, color: Colors.white),
+            title: const Text('To Pay', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ToPayPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_shipping, color: Colors.white),
+            title: const Text('To Ship', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ToShipPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.move_to_inbox, color: Colors.white),
+            title:
+                const Text('To Receive', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ToReceivePage()),
+              );
+            },
+          ),
+          ListTile(
+            leading:
+                const Icon(Icons.replay_circle_filled, color: Colors.white),
+            title: const Text('Refund', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ToRefundPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.location_on, color: Colors.white),
+            title:
+                const Text('My Address', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddressPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            title:
+                const Text('Settings', style: TextStyle(color: Colors.white)),
             onTap: () {},
           ),
           ListTile(
-            leading: const Icon(Icons.shopping_cart),
-            title: const Text('Shop'),
+            leading: const Icon(Icons.logout, color: Colors.white),
+            title: const Text('Logout', style: TextStyle(color: Colors.white)),
             onTap: () {},
           ),
-          ListTile(
-            leading: const Icon(Icons.currency_exchange),
-            title: const Text('Currency'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.contact_support_outlined),
-            title: const Text('Help'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Logout'),
-            onTap: () {},
-          )
         ],
       ),
     );
@@ -140,11 +204,20 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBannerSlider() {
-    final List<String> bannerImages = [
-      'assets/banner1.jpg',
-      'assets/banner2.jpg',
-      'assets/banner3.jpg',
+    Widget _buildBannerSlider() {
+    final List<Map<String, String>> bannerImages = [
+      {
+        'image': 'assets/happy.jpg',
+        'text': 'Seamlessly Shopping',
+      },
+      {
+        'image': 'assets/uber-cabs-1024x576.webp',
+        'text': 'Find Taxi/Uber Here',
+      },
+      {
+        'image': 'assets/Queens-Tavern-Steak.jpg',
+        'text': 'Order Food Here',
+      },
     ];
 
     return CarouselSlider(
@@ -154,63 +227,141 @@ class MalawiSuperAppPage extends StatelessWidget {
         enlargeCenterPage: true,
         viewportFraction: 0.9,
       ),
-      items: bannerImages.map((imagePath) {
+      items: bannerImages.map((banner) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                banner['image']!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+              Container(
+                alignment: Alignment.bottomLeft,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  banner['text']!,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black,
+                        offset: Offset(5.0, 5.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildCategoryList() {
+  Widget _buildCategoryList(BuildContext context) {
     final List<Map<String, dynamic>> categories = [
-      {'name': 'E-Commerce', 'icon': Icons.shopping_cart},
-      {'name': 'Payments', 'icon': Icons.payment},
-      {'name': 'Transport', 'icon': Icons.local_taxi},
-      {'name': 'Bills', 'icon': Icons.receipt},
+      {'name': 'Accomodation', 'icon': Icons.hotel_sharp},
+      {'name': 'Taxi/Uber', 'icon': Icons.local_taxi},
+      {'name': 'Utility', 'icon': Icons.handshake},
       {'name': 'Food', 'icon': Icons.fastfood},
-      {'name': 'Banking', 'icon': Icons.account_balance},
+      {'name': 'Mobile Money', 'icon': Icons.mobile_friendly},
       {'name': 'Social', 'icon': Icons.group},
       {'name': 'Education', 'icon': Icons.school},
       {'name': 'Health', 'icon': Icons.health_and_safety},
     ];
 
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.grey[200],
-                  child: Icon(categories[index]['icon'], color: Colors.orange),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  categories[index]['name'],
-                  style: const TextStyle(fontSize: 12, color: Colors.green),
-                ),
-              ],
-            ),
-          );
-        },
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
       ),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            String categoryName = categories[index]['name'];
+            if (categoryName == 'Accomodation') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AccomodationPage()),
+              );
+            } else if (categoryName == 'Taxi/Uber') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TaxiPage()),
+              );
+            } else if (categoryName == 'Utility') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UtilityPage()),
+              );
+            } else if (categoryName == 'Food') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FoodPage()),
+              );
+            } else if (categoryName == 'Mobile Money') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MobilemoneyPage()),
+              );
+            } else if (categoryName == 'Social') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SocialPage()),
+              );
+            } else if (categoryName == 'Education') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EducationPage()),
+              );
+            } else if (categoryName == 'Health') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HealthPage()),
+              );
+            }
+          },
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.orange,
+                child: Icon(
+                  categories[index]['icon'],
+                  color: const Color.fromRGBO(255, 255, 255, 1),
+                  size: 30,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                categories[index]['name'],
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
 Widget _buildShoeSection() {
   final List<Map<String, String>> shoeData = [
-    {'image': 'assets/shoes/airforce.jpg', 'name': 'iphone 12 pro max', 'price': '850,000'},
+    {'image': 'assets/shoes/airforce.jpg', 'name': 'iphones', 'price': '850,000'},
     {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150,000'},
     {'image': 'assets/shoes/converse.jpg', 'name': 'classic jersey', 'price': '30,0000'},
     {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,00'},
@@ -328,10 +479,7 @@ class ShoeCard extends StatelessWidget {
                 title: const Text('more details'),
                 onTap: () {
                   Navigator.pop(context); // Close the bottom sheet
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Proceeding to buy $name')),
-                  );
-                  // Add your buy-now logic here
+                
                 },
               ),
             ],
@@ -371,22 +519,25 @@ class ShoeCard extends StatelessWidget {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 5),
-                    const Text(
-                      "\$mwk{price}",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600, color: Colors.greenAccent),
+                    Text(
+                      "\mwk ${price}",
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600, color: Colors.green),
                     ),
                   ],
                 ),
                 GestureDetector(
                   onTap: () => _showOptions(context),
-                  child: const Icon(Icons.add_circle, color: Colors.blue),
+                  child: const Icon(Icons.add_circle, color: Colors.redAccent),
                 ),
               ],
             ),
           ),
+         
         ],
       ),
+      
     );
+    
   }
 }
