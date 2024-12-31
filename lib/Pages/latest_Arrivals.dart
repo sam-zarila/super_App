@@ -17,4 +17,16 @@ class _LatestArrivalsState extends State<LatestArrivals> {
   Widget build(BuildContext context) {
     return const Placeholder();
   }
+
+  void _showOptions(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (context) => Container(
+      padding: EdgeInsets.all(16),
+      child: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile()
+        ],
+      ),
+    ));
+  }
 }
