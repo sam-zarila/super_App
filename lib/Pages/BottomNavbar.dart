@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import '../Pages/marketPlace.dart';
 
 class Bottomnavbar extends StatefulWidget {
   const Bottomnavbar({super.key});
@@ -14,7 +15,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   
   final List<Widget> _pages = [
     MalawiSuperAppPage(),
-     Placeholder(),        
+     MarketPage(),       
     Placeholder(),       
     Placeholder(),        
     Placeholder(),        
