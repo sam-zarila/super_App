@@ -3,18 +3,25 @@ class MarketPlaceModel {
   final String image;
   final String name;
   final int price;
+  final String description;
 
   MarketPlaceModel(
       {required this.id,
       required this.image,
       required this.name,
-      required this.price});
+      required this.price,
+       required this.description
+      }
+      );
 
   factory MarketPlaceModel.fromJson(Map<String, dynamic> json) {
     return MarketPlaceModel(
         id: json['id'],
         image: json['image'],
         name: json['name'],
-        price: json['price']);
+        price: json['price'],
+        description: json['description'],
+        );
+
   }
 }
