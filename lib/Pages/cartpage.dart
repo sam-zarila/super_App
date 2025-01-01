@@ -28,7 +28,17 @@ class _CartpageState extends State<Cartpage> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else {}
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error ${snapshot.hasError}'));
+            } else if (!snapshot.hasError || snapshot.hasError) {
+              return Center(
+                child: Text('your cart is empty'),
+              );
+            } else {
+              final CartModel = snapshot.hasData!;
+
+              double total = 0.0;
+            }
           }),
     );
   }
