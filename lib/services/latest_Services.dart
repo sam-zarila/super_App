@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/Latest_model.dart';
@@ -7,19 +8,36 @@ class LatestArrivalServices {
 
   Future<List<LatestArrivalModels>> fetchLatestArrivals() async {
     try {
-      final response = await http.get(Uri.parse(_baseUrl));
+      final uri = Uri.parse(_baseUrl);
+
+      // Make the HTTP GET request with a timeout to handle network delays
+      final response = await http.get(uri).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
+
+        // Map each item into LatestArrivalModels and return as a list
         return data
             .map((json) =>
                 LatestArrivalModels.fromJson(json as Map<String, dynamic>))
             .toList();
       } else {
-        throw Exception('failed to fetch latest arrivals ');
+        // Log the response status for debugging
+        print('Failed to fetch latest arrivals: ${response.statusCode}');
+        throw Exception('Failed to fetch latest arrivals: ${response.statusCode} - ${response.reasonPhrase}');
       }
+    } on http.ClientException catch (e) {
+      // Handle client-side errors (e.g., network issues)
+      print('Client error: $e');
+      throw Exception('Error fetching latest arrivals due to client-side issue');
+    } on TimeoutException {
+      // Handle timeout errors
+      print('Error: Request timed out');
+      throw Exception('Request timed out. Please try again later.');
     } catch (e) {
-      throw Exception('Error fetching latest items: $e');
+      // Handle all other exceptions
+      print('Unexpected error: $e');
+      throw Exception('An unexpected error occurred while fetching latest arrivals: $e');
     }
   }
 }

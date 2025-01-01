@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:super_app/Pages/Edu.dart';
+import 'package:super_app/Pages/ExchangeRate.dart';
 import 'package:super_app/Pages/Health.dart';
 import 'package:super_app/Pages/MobileMoney.dart';
+import 'package:super_app/Pages/More.dart';
 import 'package:super_app/Pages/Taxi.dart';
 import 'package:super_app/Pages/ToRefund.dart';
 import 'package:super_app/Pages/Topay.dart';
@@ -12,6 +14,7 @@ import 'package:super_app/Pages/accomodation.dart';
 import 'package:super_app/Pages/address.dart';
 import 'package:super_app/Pages/food.dart';
 import 'package:super_app/Pages/random.dart';
+import 'package:super_app/Pages/seller.dart';
 import 'package:super_app/Pages/social.dart';
 import 'package:super_app/Pages/utility.dart';
 import '../Pages/Home/Latest_page.dart';
@@ -26,7 +29,7 @@ class MalawiSuperAppPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text(
-          "uniConnect Malawi",
+          "Uni Connect Malawi",
           style: TextStyle(
               color: Colors.orange, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -288,9 +291,9 @@ class MalawiSuperAppPage extends StatelessWidget {
       {'name': 'Utility', 'icon': Icons.handshake},
       {'name': 'Food', 'icon': Icons.fastfood},
       {'name': 'Mobile Money', 'icon': Icons.mobile_friendly},
-      {'name': 'Social', 'icon': Icons.group},
+      {'name': 'Exchange Rates', 'icon': Icons.currency_exchange},
       {'name': 'Education', 'icon': Icons.school},
-      {'name': 'Health', 'icon': Icons.health_and_safety},
+      {'name': 'More', 'icon': Icons.more},
     ];
 
     return GridView.builder(
@@ -331,20 +334,20 @@ class MalawiSuperAppPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const MobilemoneyPage()),
               );
-            } else if (categoryName == 'Social') {
+            } else if (categoryName == 'Exchange Rates') {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SocialPage()),
+                MaterialPageRoute(builder: (context) => const ExchangeRateScreen()),
               );
             } else if (categoryName == 'Education') {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const EducationPage()),
               );
-            } else if (categoryName == 'Health') {
+            } else if (categoryName == 'More') {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HealthPage()),
+                MaterialPageRoute(builder: (context) => const MorePage()),
               );
             }
           },
@@ -375,10 +378,10 @@ class MalawiSuperAppPage extends StatelessWidget {
 
 Widget _buildShoeSection() {
   final List<Map<String, String>> shoeData = [
-    {'image': 'assets/shoes/airforce.jpg', 'name': 'iphones', 'price': '850,000'},
+    {'image': 'assets/shoes/airforce.jpg', 'name': 'iPhones', 'price': '850,000'},
     {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150,000'},
-    {'image': 'assets/shoes/converse.jpg', 'name': 'classic jersey', 'price': '30,0000'},
-    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,00'},
+    {'image': 'assets/shoes/converse.jpg', 'name': 'Classic Jersey', 'price': '30,0000'},
+    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,000'},
   ];
 
   return Column(
@@ -390,14 +393,16 @@ Widget _buildShoeSection() {
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       const SizedBox(height: 10),
+
+      // Grid view for shoes
       GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 0.65,
+          crossAxisCount: 2, // Number of items in each row (adjust as needed)
+          crossAxisSpacing: 10, // Spacing between columns
+          mainAxisSpacing: 10, // Spacing between rows
+          childAspectRatio: 0.7, // Adjust the aspect ratio of each card (reduce to make cards smaller)
         ),
         itemCount: shoeData.length,
         itemBuilder: (context, index) {
@@ -405,13 +410,19 @@ Widget _buildShoeSection() {
             imageUrl: shoeData[index]['image']!,
             name: shoeData[index]['name']!,
             price: shoeData[index]['price']!,
-           
           );
         },
       ),
+      
+      // Add BecomeSellerWidget and BecomeDriverWidget after the grid
+      const SizedBox(height: 20),
+      const BecomeSellerWidget(), // Include BecomeSellerWidget
+      const SizedBox(height: 20),
+      const BecomeDriverWidget(), // Include BecomeDriverWidget
     ],
   );
 }
+
  Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: 0,
