@@ -17,7 +17,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch item details based on the passed itemId
+    // Fetch item details
     _itemDetails = MarketplaceService().getItemDetails(widget.itemId);
   }
 
@@ -25,9 +25,20 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item Details'),
         backgroundColor: Colors.white,
-        elevation: 2,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.favorite_border, color: Colors.black),
+            onPressed: () {
+              // Favorite button action
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<MarketplaceDetailModel?>(
         future: _itemDetails,
@@ -46,49 +57,115 @@ class _DetailsPageState extends State<DetailsPage> {
 
           final item = snapshot.data!;
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
+          return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image at the top
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    item.image,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                // Product Image
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      item.image,
+                      height: 300,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
 
-                // Name and Price below the image
-                Text(
-                  item.name,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Price: MWK ${item.price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 20, color: Colors.green),
-                ),
-                SizedBox(height: 16),
+                // Product Details
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product Name
+                      Text(
+                        item.name,
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
 
-                // Description below the price
-                Text(
-                  item.description, // Assuming description is part of MarketplaceDetailModel
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 16),
+                      // Price and Stock
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'MWK ${item.price.toStringAsFixed(2)}',
+                            style: TextStyle(fontSize: 20, color: Colors.green),
+                          ),
+                          Text(
+                            'Available in stock',
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
 
-                // Button to add item to cart
-                ElevatedButton(
-                  onPressed: () {
-                    // Add functionality for adding to cart
-                    print('Item added to cart');
-                  },
-                  child: Text('Add to Cart'),
+                      // Size Selector
+                      Text(
+                        'Size',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [39, 40, 41, 42].map((size) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: ChoiceChip(
+                              label: Text(size.toString()),
+                              selected: false, // Update with selection logic
+                              onSelected: (selected) {
+                                // Handle size selection
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(height: 16),
+
+                      // Description
+                      Text(
+                        'Description',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        item.description,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                      ),
+                      SizedBox(height: 24),
+
+                      // Add to Cart Button
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: () {
+                            // Add to cart functionality
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.shopping_cart, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                'Add to Cart',
+                                style: TextStyle(fontSize: 16, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
