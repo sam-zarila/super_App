@@ -24,6 +24,11 @@ class _CartpageState extends State<Cartpage> {
             if (!mounted) {
               return Container();
             }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {}
           }),
     );
   }
