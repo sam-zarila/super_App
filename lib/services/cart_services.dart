@@ -17,5 +17,11 @@ class CartService {
      body: json.encode(cartItem.toJSON()),
     
     );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      
+    } else {
+      
+    }
   }
 }
