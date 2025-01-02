@@ -16,7 +16,7 @@ class _CartpageState extends State<Cartpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Cart'),
+        title: const Text('My Cart 🛒'),
       ),
       body: FutureBuilder<List<CartModel>>(
           future: widget.cartService.fetchCartItems(),

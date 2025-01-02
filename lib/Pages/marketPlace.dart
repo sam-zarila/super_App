@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:super_app/models/marketplace.model.dart';
 import 'package:super_app/services/marketplace.service.dart';
-import 'package:super_app/services/cart_services.dart';
+import 'package:super_app/services/cart_services.dart';  // Make sure to import CartService
 import '../Pages/Home/view_detailsPage.dart';
-import '../models/cart_model.dart';
 
 class MarketPage extends StatefulWidget {
-  final CartService cartService;
+  final CartService cartService;  // Make sure CartService is passed here
 
   const MarketPage({required this.cartService, Key? key}) : super(key: key);
 
@@ -22,65 +21,6 @@ class _MarketPageState extends State<MarketPage> {
   void initState() {
     super.initState();
     itemsFuture = marketplaceService.fetchMarketItems();
-  }
-
-  // Add item to cart
-  Future<void> _addToCart(MarketPlaceModel item) async {
-    final cartItem = CartModel(
-      item: item.id,
-      quantity: 1,
-      name: item.name,
-      image: item.image,
-      price: item.price,
-      description: item.description,
-    );
-
-    try {
-      await widget.cartService.addToCart(cartItem);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${item.name} added to cart successfully!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add ${item.name} to cart: $e')),
-      );
-    }
-  }
-
-  // Function to show options for the item when clicked
-  void _showOptions(BuildContext context, MarketPlaceModel item) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.add_shopping_cart),
-              title: Text("Add to Cart"),
-              onTap: () {
-                Navigator.pop(context);
-                _addToCart(item); // Add to cart
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.details),
-              title: Text("View Details"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsPage(itemId: item.id),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -126,58 +66,65 @@ class _MarketPageState extends State<MarketPage> {
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final item = items[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            item.image,
-                            height: 150,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to the details page and pass cartService
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            itemId: item.id,
+                            cartService: widget.cartService,  // Pass cartService here
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.name,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    "MWK ${item.price}",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.green),
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () => _showOptions(context, item),
-                                child: const Icon(
-                                  Icons.add_circle,
-                                  color: Colors.redAccent,
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              item.image,
+                              height: 150,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      "MWK ${item.price}",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.green),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
