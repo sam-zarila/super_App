@@ -35,9 +35,23 @@ class _CartpageState extends State<Cartpage> {
                 child: Text('your cart is empty'),
               );
             } else {
-              final CartModel = snapshot.hasData!;
+              final cartModels = snapshot.hasData!;
 
               double total = 0.0;
+              for (var item in cartModels) {
+                total += item.price * item.quantity;
+              }
+
+              return Column(
+                children: [
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: cartModels.length,
+                          itemBuilder: (context, index) {
+                           
+                          }))
+                ],
+              );
             }
           }),
     );
