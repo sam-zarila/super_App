@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:super_app/models/marketplace.model.dart';
 import 'package:super_app/services/marketplace.service.dart';
- import '../Pages/Home/view_detailsPage.dart';
+import 'package:super_app/services/cart_services.dart';
+import '../Pages/Home/view_detailsPage.dart';
+import '../models/cart_model.dart';
 
 class MarketPage extends StatefulWidget {
+  final CartService cartService;
+
+  const MarketPage({required this.cartService, Key? key}) : super(key: key);
+
   @override
   _MarketPageState createState() => _MarketPageState();
 }
@@ -16,6 +22,29 @@ class _MarketPageState extends State<MarketPage> {
   void initState() {
     super.initState();
     itemsFuture = marketplaceService.fetchMarketItems();
+  }
+
+  // Add item to cart
+  Future<void> _addToCart(MarketPlaceModel item) async {
+    final cartItem = CartModel(
+      item: item.id,
+      quantity: 1,
+      name: item.name,
+      image: item.image,
+      price: item.price,
+      description: item.description,
+    );
+
+    try {
+      await widget.cartService.addToCart(cartItem);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${item.name} added to cart successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add ${item.name} to cart: $e')),
+      );
+    }
   }
 
   // Function to show options for the item when clicked
@@ -31,8 +60,8 @@ class _MarketPageState extends State<MarketPage> {
               leading: Icon(Icons.add_shopping_cart),
               title: Text("Add to Cart"),
               onTap: () {
-                // Handle add to cart functionality
                 Navigator.pop(context);
+                _addToCart(item); // Add to cart
               },
             ),
             ListTile(
@@ -40,7 +69,6 @@ class _MarketPageState extends State<MarketPage> {
               title: Text("View Details"),
               onTap: () {
                 Navigator.pop(context);
-                // Navigate to the details page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
