@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015757426589",
+    "project_id": "superapp-bfb54",
+    "storage_bucket": "superapp-bfb54.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015757426589:android:606ca3a60e484960bb2974",
+        "android_client_info": {
+          "package_name": "com.example.super_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKMH4aALZLKrO371lgY7eYKs-yh5QJoOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
