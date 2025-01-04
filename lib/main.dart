@@ -2,15 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:super_app/Pages/BottomNavbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:super_app/Pages/cartpage.dart';
-import 'package:super_app/services/cart_services.dart';
 import 'package:super_app/signup/Login.dart';
 import 'package:super_app/signup/Signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
+  // Initialize Firebase with correct options
   await Firebase.initializeApp(
     options: FirebaseOptions(
       apiKey: "AIzaSyAD_x-PZoh4I7SMXTjLPmuOjIe0T3s1DOQ",
@@ -33,14 +31,44 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/', // Set initial route to '/' (AuthPage)
+      initialRoute: '/', // Set initial route to '/' (Login page)
       routes: {
-     
-        '/login': (context) => LoginPage(),
-        '/signup': (context) => SignupPage(),
-        '/bottomnavbar': (context) => Bottomnavbar(),  // Ensure that this is the destination
-        '/cart': (context) => Cartpage(cartService: CartService(), userId: 'sampleUserId'), 
+        '/': (context) => AuthPage(),  // AuthPage for Login/Signup
+        '/login': (context) => LoginPage(),  // LoginPage route
+        '/signup': (context) => SignupPage(),  // SignupPage route
+        '/bottomnavbar': (context) => Bottomnavbar(),  // Bottom navbar route
       },
+    );
+  }
+}
+
+class AuthPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login / Signup'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');  // Navigate to login page
+              },
+              child: Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/signup');  // Navigate to signup page
+              },
+              child: Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
