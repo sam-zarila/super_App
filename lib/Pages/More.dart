@@ -43,7 +43,7 @@ class MorePage extends StatelessWidget {
                 if (subcategoryName == 'social') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SignupPage()),
+                    MaterialPageRoute(builder: (context) =>  SignupPage()),
                   );
                 } else if (subcategoryName == 'Health') {
                   Navigator.push(

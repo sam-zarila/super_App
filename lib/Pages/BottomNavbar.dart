@@ -26,7 +26,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     _pages = [
       MalawiSuperAppPage(),
       MarketPage(cartService: cartService), 
-      Cartpage(cartService: cartService, userId: _getUserId()),  // Pass userId here
+      Cartpage(cartService: cartService, userId: _getUserId() ?? "default_user_id"),
+
       Placeholder(),
       Placeholder(),
       Placeholder(),
