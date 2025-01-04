@@ -23,7 +23,7 @@ class _CartpageState extends State<Cartpage> {
       ),
       body: FutureBuilder<List<CartModel>>(
         // Fetch the cart based on the user's ID
-        future: widget.cartService.fetchCartItems(widget.userId),
+        future: widget.cartService.fetchCartItems(userId: widget.userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
