@@ -1,24 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Pages/BottomNavbar.dart';
-import 'firebase_options.dart';  // This file will be generated after Firebase setup
+import 'package:super_app/Pages/BottomNavbar.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);  // Use the generated file
-  
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  // Initialize Firebase with correct options
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyAD_x-PZoh4I7SMXTjLPmuOjIe0T3s1DOQ",
+      authDomain: "nthananaapp-944bf.firebaseapp.com",
+      projectId: "nthananaapp-944bf",
+      storageBucket: "nthananaapp-944bf.appspot.com",
+      messagingSenderId: "246842410163",
+      appId: "1:246842410163:web:abcd1234efgh5678",
+    ),
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Bottomnavbar(),
-    );
-  }
+  runApp(const MaterialApp(
+    home: Bottomnavbar(),
+  ));
 }

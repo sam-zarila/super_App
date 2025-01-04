@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import to format the date
+import 'package:super_app/models/sellers_model.dart';
 
 class BecomeSellerWidget extends StatelessWidget {
   const BecomeSellerWidget({Key? key}) : super(key: key);
@@ -123,6 +125,8 @@ class BecomeDriverWidget extends StatelessWidget {
 
 //applay now page starts here
 
+
+
 class ApplyNowPage extends StatefulWidget {
   @override
   _ApplyNowPageState createState() => _ApplyNowPageState();
@@ -138,47 +142,47 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
   final TextEditingController _businessNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _businessDescriptionController =
-      TextEditingController();
+  final TextEditingController _businessDescriptionController = TextEditingController();
 
   bool _termsAccepted = false;
 
   Future<void> _submitApplication() async {
     final url = Uri.parse(
-        'https://your-api-endpoint.com/applications'); // Replace with your API endpoint
+        'http://127.0.0.1:3000/sellers/create'); // Replace with your API endpoint
 
-    final body = {
-      'firstName': _firstNameController.text,
-      'surname': _surnameController.text,
-      'nationalId': _nationalIdController.text,
-      'businessName': _businessNameController.text,
-      'phoneNumber': _phoneNumberController.text,
-      'address': _addressController.text,
-      'businessDescription': _businessDescriptionController.text,
-    };
+    // NationalID is a string (no conversion needed)
+    final nationalId = _nationalIdController.text;
+
+    // Get the current date in ISO 8601 format
+    final currentDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+
+    // Create request body
+    final body = json.encode({
+      'FirstName': _firstNameController.text,
+      'Surname': _surnameController.text,
+      'NationalID': nationalId, // No conversion, keep as a string
+      'BusinessName': _businessNameController.text,
+      'PhoneNumber': _phoneNumberController.text,
+      'Address': _addressController.text,
+      'BusinessDescription': _businessDescriptionController.text,
+      'ApplicationDate': currentDate, // Automatically filled with current date
+    });
 
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(body),
+        body: body,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application submitted successfully!')),
-        );
+        _showSuccessDialog('Application submitted successfully!');
         _clearForm();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Failed to submit application: ${response.body}')),
-        );
+        _showErrorDialog('Failed to submit application: ${response.body}');
       }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $error')),
-      );
+      _showErrorDialog('An error occurred: $error');
     }
   }
 
@@ -196,13 +200,53 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
     });
   }
 
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Become a Seller'),
         centerTitle: true,
-        backgroundColor: Colors.orange, // Header color set to orange
+        backgroundColor: Colors.orange,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -250,6 +294,7 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
                   labelText: 'National ID',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your National ID';
@@ -367,7 +412,7 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green, // Button color set to green
+                    backgroundColor: Colors.green,
                   ),
                   child: const Text('Submit Application'),
                 ),
@@ -379,6 +424,34 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
     );
   }
 }
+
+
+class SellersApplicationFormService {
+  final String _baseUrl = 'http://127.0.0.1:3000/sellersapplicationform';
+
+  Future<bool> postSellersApplicationForm(Map<String, dynamic> formData) async {
+    try {
+      final uri = Uri.parse(_baseUrl);
+
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(formData),
+      );
+
+      if (response.statusCode == 201) {
+        print('Application submitted successfully');
+        return true;
+      } else {
+        throw Exception('Failed to submit form: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
+  }
+}
+
 // drivers form
 
 
