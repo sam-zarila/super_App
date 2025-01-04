@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';  // Import Firebase Authentication
 import 'homepage.dart';
 import '../Pages/marketPlace.dart';
 import '../services/cart_services.dart';
@@ -25,11 +26,17 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     _pages = [
       MalawiSuperAppPage(),
       MarketPage(cartService: cartService), 
-      Cartpage(cartService: cartService),
+      Cartpage(cartService: cartService, userId: _getUserId()),  // Pass userId here
       Placeholder(),
       Placeholder(),
       Placeholder(),
     ];
+  }
+
+  // Get the logged-in user's UID (user ID) from Firebase Authentication
+  String? _getUserId() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid;  // Return user ID or null if not logged in
   }
 
   void _onItemTapped(int index) {

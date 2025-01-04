@@ -1,8 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:super_app/Pages/BottomNavbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:super_app/signup/Login.dart';
+import 'package:super_app/signup/Signup.dart';
 
-Future<void> main() async {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase with correct options
@@ -17,7 +21,69 @@ Future<void> main() async {
     ),
   );
 
-  runApp(const MaterialApp(
-    home: Bottomnavbar(),
-  ));
+  // Check if the user is logged in
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Super App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),  // Listen for auth state changes
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
+            // If user is logged in, navigate to BottomNavbar
+            return Bottomnavbar();
+          } else {
+            // If no user is logged in, show login/signup screen
+            return AuthPage(); // This will show the login/signup screen
+          }
+        },
+      ),
+    );
+  }
+}
+
+class AuthPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login / Signup'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),  // Navigate to login page
+                );
+              },
+              child: Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInPage()),  // Navigate to signup page
+                );
+              },
+              child: Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
