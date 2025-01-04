@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       // Save the user's idToken to SharedPreferences
       final token = await userCredential.user!.getIdToken();
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token); // Store the idToken
+      await prefs.setString('token', token!); // Store the idToken
 
       print('Login Successful! Token: $token');
       Navigator.pushReplacementNamed(context, '/cart');
