@@ -3,17 +3,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> signUpUser(String email, String password) async {
-    final url = 'http://localhost:3000/user/register'; // Replace with your actual API URL
+  Future<void> loginUser(String email, String password) async {
+    final url = 'http://localhost:3000/user/login'; // Replace with your actual API URL
 
     final response = await http.post(
       Uri.parse(url),
@@ -24,7 +24,7 @@ class _SignInPageState extends State<SignInPage> {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final token = data['token'];
 
@@ -32,18 +32,18 @@ class _SignInPageState extends State<SignInPage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
 
-      print('Sign Up Successful! Token: $token');
+      print('Login Successful! Token: $token');
       // Navigate to Cart page or home page
       Navigator.pushReplacementNamed(context, '/cart');
     } else {
-      throw Exception('Failed to sign up: ${response.body}');
+      throw Exception('Failed to log in: ${response.body}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
+      appBar: AppBar(title: Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -62,9 +62,9 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: () {
                 final email = _emailController.text;
                 final password = _passwordController.text;
-                signUpUser(email, password);
+                loginUser(email, password);
               },
-              child: Text('Sign Up'),
+              child: Text('Login'),
             ),
           ],
         ),

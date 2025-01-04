@@ -47,26 +47,28 @@ class CartService {
   }
 
   // Fetch cart items for the logged-in user
-  Future<List<CartModel>> fetchCartItems() async {
-    final url = '$baseUrl/cart'; // Ensure '/cart' is included in the URL
+  // Fetch cart items for a specific user (userId is passed)
+Future<List<CartModel>> fetchCartItems(String userId) async {
+  final url = '$baseUrl/cart/$userId';  // Ensure your API expects the userId in the URL
 
-    final token = await _getToken(); // Get token from shared preferences
-    if (token == null) {
-      throw Exception('User not logged in');
-    }
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token', // Include token in headers
-      },
-    );
-
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((item) => CartModel.fromJSON(item)).toList();
-    } else {
-      throw Exception('Failed to fetch cart items: ${response.statusCode} - ${response.body}');
-    }
+  final token = await _getToken(); // Get token from shared preferences
+  if (token == null) {
+    throw Exception('User not logged in');
   }
+
+  final response = await http.get(
+    Uri.parse(url),
+    headers: {
+      'Authorization': 'Bearer $token', // Include token in headers
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List<dynamic> jsonResponse = json.decode(response.body);
+    return jsonResponse.map((item) => CartModel.fromJSON(item)).toList();
+  } else {
+    throw Exception('Failed to fetch cart items: ${response.statusCode} - ${response.body}');
+  }
+}
+
 }

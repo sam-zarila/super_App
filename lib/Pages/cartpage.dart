@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class Cartpage extends StatefulWidget {
   final CartService cartService;
+  final String userId; // Add userId to tie the cart to the user
 
-  const Cartpage({required this.cartService, Key? key}) : super(key: key);
+  const Cartpage({required this.cartService, required this.userId, Key? key}) : super(key: key);
 
   @override
   State<Cartpage> createState() => _CartpageState();
@@ -21,7 +22,8 @@ class _CartpageState extends State<Cartpage> {
         elevation: 0,
       ),
       body: FutureBuilder<List<CartModel>>(
-        future: widget.cartService.fetchCartItems(),
+        // Fetch the cart based on the user's ID
+        future: widget.cartService.fetchCartItems(widget.userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
