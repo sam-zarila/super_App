@@ -1,43 +1,75 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  bool _isLoading = false;
 
   Future<void> signUpUser(String email, String password) async {
-    final url = 'http://localhost:3000/user/register'; // Replace with your actual API URL
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': email,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      final data = json.decode(response.body);
-      final token = data['token'];
-
-      // Store token in SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-
-      print('Sign Up Successful! Token: $token');
-      // Navigate to Cart page or home page
-      Navigator.pushReplacementNamed(context, '/cart');
-    } else {
-      throw Exception('Failed to sign up: ${response.body}');
+    if (email.isEmpty || password.isEmpty) {
+      _showErrorDialog('Please fill in both fields');
+      return;
     }
+    if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(email)) {
+      _showErrorDialog('Please enter a valid email');
+      return;
+    }
+    if (password.length < 6) {
+      _showErrorDialog('Password must be at least 6 characters');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Optionally send email verification
+      await userCredential.user?.sendEmailVerification();
+
+      print('Signup Successful! User ID: ${userCredential.user!.uid}');
+      Navigator.pushReplacementNamed(context, '/login');
+    } on FirebaseAuthException catch (e) {
+      print('Signup failed: $e');
+      _showErrorDialog(e.message ?? 'An error occurred');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Sign Up Failed'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -58,14 +90,16 @@ class _SignInPageState extends State<SignInPage> {
               obscureText: true,
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                signUpUser(email, password);
-              },
-              child: Text('Sign Up'),
-            ),
+            _isLoading
+                ? CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () {
+                      final email = _emailController.text;
+                      final password = _passwordController.text;
+                      signUpUser(email, password);
+                    },
+                    child: Text('Sign Up'),
+                  ),
           ],
         ),
       ),

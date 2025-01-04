@@ -1,6 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,33 +10,72 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
 
   Future<void> loginUser(String email, String password) async {
-    final url = 'http://localhost:3000/user/login'; // Replace with your actual API URL
+    if (email.isEmpty || password.isEmpty) {
+      _showErrorDialog('Please fill in both fields');
+      return;
+    }
+    if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(email)) {
+      _showErrorDialog('Please enter a valid email');
+      return;
+    }
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': email,
-        'password': password,
-      }),
-    );
+    setState(() {
+      _isLoading = true;
+    });
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final token = data['token'];
+    try {
+      // Sign in with Firebase Auth
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      // Store token in SharedPreferences
+      // Check if the email is verified
+      if (!userCredential.user!.emailVerified) {
+        _showErrorDialog('Please verify your email before logging in');
+        return;
+      }
+
+      // Save the user's idToken to SharedPreferences
+      final token = await userCredential.user!.getIdToken();
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
+      await prefs.setString('token', token); // Store the idToken
 
       print('Login Successful! Token: $token');
-      // Navigate to Cart page or home page
       Navigator.pushReplacementNamed(context, '/cart');
-    } else {
-      throw Exception('Failed to log in: ${response.body}');
+    } on FirebaseAuthException catch (e) {
+      // Handle login error
+      print('Login failed: $e');
+      _showErrorDialog(e.message ?? 'An error occurred');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Login Failed'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -58,13 +96,21 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            _isLoading
+                ? CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () {
+                      final email = _emailController.text;
+                      final password = _passwordController.text;
+                      loginUser(email, password);
+                    },
+                    child: Text('Login'),
+                  ),
+            TextButton(
               onPressed: () {
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                loginUser(email, password);
+                Navigator.pushReplacementNamed(context, '/signup');
               },
-              child: Text('Login'),
+              child: Text('Don’t have an account? Sign up'),
             ),
           ],
         ),
