@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:super_app/Pages/BottomNavbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:super_app/Pages/cartpage.dart';
+import 'package:super_app/services/cart_services.dart';
 import 'package:super_app/signup/Login.dart';
 import 'package:super_app/signup/Signup.dart';
 
@@ -33,11 +35,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set initial route to '/' (AuthPage)
       routes: {
-        '/': (context) => AuthPage(),
+     
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/bottomnavbar': (context) => Bottomnavbar(),  // Ensure that this is the destination
-        '/cart': (context) => Cartpage(cartService: CartService(), userId: 'sampleUserId'), // Example CartPage route
+        '/cart': (context) => Cartpage(cartService: CartService(), userId: 'sampleUserId'), 
       },
     );
   }
