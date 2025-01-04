@@ -11,7 +11,7 @@ void main() async {
 
   // Initialize Firebase with correct options
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
+    options:  FirebaseOptions(
       apiKey: "AIzaSyAD_x-PZoh4I7SMXTjLPmuOjIe0T3s1DOQ",
       authDomain: "nthananaapp-944bf.firebaseapp.com",
       projectId: "nthananaapp-944bf",
