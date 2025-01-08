@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignupPage(),  // SignupPage route
         '/bottomnavbar': (context) => Bottomnavbar(),  // Bottom navbar route
         '/cart': (context) => Cartpage(
+            cartService: CartService('http://127.0.0.1:3000/cart'),
+            userId:'' ,
            
         ),
       },
