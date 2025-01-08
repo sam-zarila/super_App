@@ -7,9 +7,6 @@ import 'package:super_app/services/cart_services.dart';
 import 'package:super_app/signup/Login.dart';
 import 'package:super_app/signup/Signup.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -29,6 +26,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final CartService cartService = CartService('http://127.0.0.1:3000/cart'); // Initialize CartService
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,17 +37,41 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set initial route to '/' (Login page)
       routes: {
-        '/': (context) => AuthPage(),  // AuthPage for Login/Signup
-        '/login': (context) => LoginPage(),  // LoginPage route
-        '/signup': (context) => SignupPage(),  // SignupPage route
-        '/bottomnavbar': (context) => Bottomnavbar(),  // Bottom navbar route
-        '/cart': (context) => Cartpage(
-            cartService: CartService('http://127.0.0.1:3000/cart'),
-            userId:'' ,
-           
-        ),
+        '/': (context) => AuthPage(), // AuthPage for Login/Signup
+        '/login': (context) => LoginPage(), // LoginPage route
+        '/signup': (context) => SignupPage(), // SignupPage route
+        '/bottomnavbar': (context) => Bottomnavbar(), // Bottom navbar route
+        '/cart': (context) => FutureBuilder<String>(
+              future: _getUserId(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError || !snapshot.hasData) {
+                  return const Scaffold(
+                    body: Center(child: Text('Error loading user data')),
+                  );
+                } else {
+                  return Cartpage(
+                    cartService: cartService,
+                    userId: snapshot.data!,
+                  );
+                }
+              },
+            ),
       },
     );
+  }
+
+  // Fetches the user ID from Firebase Authentication
+  Future<String> _getUserId() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid; // Returns the Firebase user ID
+    } else {
+      throw Exception('No user signed in'); // Throws an error if no user is signed in
+    }
   }
 }
 
@@ -66,13 +89,13 @@ class AuthPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login');  // Navigate to login page
+                Navigator.pushNamed(context, '/login'); // Navigate to login page
               },
               child: Text('Login'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signup');  // Navigate to signup page
+                Navigator.pushNamed(context, '/signup'); // Navigate to signup page
               },
               child: Text('Sign Up'),
             ),
