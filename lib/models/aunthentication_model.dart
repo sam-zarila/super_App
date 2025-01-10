@@ -11,6 +11,17 @@ class UserModel {
     required this.password,
   });
 
+  // Convert the model to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+    };
+  }
+
+  // Optional: Construct the model from JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],
