@@ -5,7 +5,7 @@ import 'package:super_app/models/aunthentication_model.dart';
 
 
 class AuthService {
-  final String baseUrl = 'http://localhost:3000'; // Replace with your backend URL
+  final String baseUrl = 'http://127.0.0.1:3000'; // Replace with your backend URL
 
   // Signup method
   Future<bool> signup(UserModel user) async {
