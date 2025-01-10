@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_app/models/aunthentication_model.dart';
+
 
 class AuthService {
   final String baseUrl = 'http://localhost:3000'; // Replace with your backend URL
 
   // Signup method
-  Future<bool> signup(Map<String, dynamic> user) async {
+  Future<bool> signup(UserModel user) async {
     final url = Uri.parse('$baseUrl/auth/register');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(user),
+      body: jsonEncode(user.toJson()), 
     );
 
     return response.statusCode == 201;
