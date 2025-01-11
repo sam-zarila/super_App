@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:super_app/Pages/BottomNavbar.dart';
+import 'package:super_app/Pages/cartpage.dart';
 import 'dart:convert';
 import '../Signup/Signup.dart'; // Adjust the import to point to your Signup page.
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   Future<void> loginUser() async {
-    final String apiUrl = "http://127.0.0.1:3000/auth/login"; 
+    final String apiUrl = "http://localhost:3000/auth/login"; // Your backend endpoint
     final String email = emailController.text.trim();
     final String password = passwordController.text.trim();
 
@@ -51,8 +54,11 @@ class _LoginPageState extends State<LoginPage> {
           const SnackBar(content: Text("Login Successful")),
         );
 
-       
-        Navigator.pushReplacementNamed(context, '/bottomnavbar');
+        // Navigate to CartPage after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+        );
       } else {
         final error = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
