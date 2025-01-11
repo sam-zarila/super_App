@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   Future<void> loginUser() async {
-    final String apiUrl = "http://127.0.0.1:3000/auth/login"; // Your backend endpoint
+    final String apiUrl = "http://127.0.0.1:3000/auth/login"; 
     final String email = emailController.text.trim();
     final String password = passwordController.text.trim();
 
@@ -51,9 +51,8 @@ class _LoginPageState extends State<LoginPage> {
           const SnackBar(content: Text("Login Successful")),
         );
 
-        // Navigate to the next page or save token
-        // Example: Navigate to HomePage
-        Navigator.pushReplacementNamed(context, '/home');
+       
+        Navigator.pushReplacementNamed(context, '/bottomnavbar');
       } else {
         final error = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
