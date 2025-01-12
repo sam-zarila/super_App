@@ -47,7 +47,7 @@ class CartService {
   }
 
   // Fetch cart items for the logged-in user
-  Future<List<CartModel>> fetchCartItems({required String userId}) async {
+  Future<List<CartModel>> fetchCartItems() async {
     final token = await _getToken(); // Get token from shared preferences
     if (token == null) {
       throw Exception('User not logged in');
