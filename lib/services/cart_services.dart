@@ -23,26 +23,31 @@ class CartService {
       throw Exception('User not logged in');
     }
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token', // Include token in headers
-      },
-      body: json.encode({
-        'item': cartItem.item,
-        'quantity': cartItem.quantity,
-        'image': cartItem.image,
-        'name': cartItem.name,
-        'price': cartItem.price,
-        'description': cartItem.description, // Ensure you're passing description if needed
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token', // Include token in headers
+        },
+        body: json.encode({
+          'item': cartItem.item,
+          'quantity': cartItem.quantity,
+          'image': cartItem.image,
+          'name': cartItem.name,
+          'price': cartItem.price,
+          'description': cartItem.description, // Ensure you're passing description if needed
+        }),
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Item added successfully: ${response.body}');
-    } else {
-      throw Exception('Failed to add item to cart: ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('Item added successfully: ${response.body}');
+      } else {
+        throw Exception('Failed to add item to cart: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+      throw Exception('Failed to add item to cart: $e');
     }
   }
 
@@ -55,18 +60,23 @@ class CartService {
 
     final url = '$baseUrl/cart';  // Ensure your API is fetching cart for logged-in user
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token', // Include token in headers
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token', // Include token in headers
+        },
+      );
 
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((item) => CartModel.fromJSON(item)).toList();
-    } else {
-      throw Exception('Failed to fetch cart items: ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        return jsonResponse.map((item) => CartModel.fromJSON(item)).toList();
+      } else {
+        throw Exception('Failed to fetch cart items: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+      throw Exception('Failed to fetch cart items: $e');
     }
   }
 }
