@@ -15,7 +15,7 @@ void main() {
      routes: {
         '/signup': (context) => SignupPage(),
         '/login': (context) => LoginPage(),
-        '/bottomnavbar': (context) => Bottomnavbar()    
+         '/cartpage': (context) => Cartpage(cartService: CartService('http://127.0.0.1:3000/cart'),), 
      
       },
   ));
