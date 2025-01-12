@@ -14,7 +14,8 @@ void main() {
      routes: {
         '/signup': (context) => SignupPage(),
         '/login': (context) => LoginPage(),
-        // '/cart': (context) => Cartpage(cartService: CartService(baseUrl),), // Your existing cart screen
+         '/bottomnavbar': (context) => BottomnavBar(), 
+     
       },
   ));
 }
