@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/hostel_service.dart';
 
-
 class HostelPage extends StatefulWidget {
   @override
   _HostelPageState createState() => _HostelPageState();
@@ -86,7 +85,15 @@ class _HostelPageState extends State<HostelPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(hostel.houseName),
                           ),
-                          Text('\mwk${hostel.price} / month'),
+                          Text('Location: ${hostel.location}'),
+                          Text('Room Type: ${hostel.roomType}'),
+                          Text('Gender Category: ${hostel.genderCategory}'),
+                          Text('Room Number: ${hostel.roomNumber}'),
+                          Text('Price: MWK ${hostel.price} / month'),
+                          Text('Booking Fee: MWK ${hostel.bookingFee}'),
+                          Text('Landlord Phone: ${hostel.landlordPhoneNumber}'),
+                          Text('Status: ${hostel.status}'),
+                          Text('Max People: ${hostel.maxPeople}'),
                         ],
                       ),
                     );
@@ -120,7 +127,7 @@ class _HostelPageState extends State<HostelPage> {
                         fit: BoxFit.cover,
                       ),
                       title: Text(hostel.houseName),
-                      subtitle: Text('${hostel.location} • \$${hostel.price} / night'),
+                      subtitle: Text('${hostel.location} • MWK ${hostel.price} / month'),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Navigate to details
