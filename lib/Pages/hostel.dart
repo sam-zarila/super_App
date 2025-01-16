@@ -86,7 +86,7 @@ class _HostelPageState extends State<HostelPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(hostel.houseName),
                           ),
-                          Text('\$${hostel.price} / night'),
+                          Text('\mwk${hostel.price} / month'),
                         ],
                       ),
                     );
