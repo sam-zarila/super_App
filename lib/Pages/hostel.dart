@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/hostel_service.dart';
+import 'hostel_detail_page.dart';  // Import the detail page
 
 class HostelPage extends StatefulWidget {
   @override
@@ -85,15 +86,19 @@ class _HostelPageState extends State<HostelPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(hostel.houseName),
                           ),
-                          Text('Location: ${hostel.location}'),
-                          Text('Room Type: ${hostel.roomType}'),
-                          Text('Gender Category: ${hostel.genderCategory}'),
-                          Text('Room Number: ${hostel.roomNumber}'),
                           Text('Price: MWK ${hostel.price} / month'),
-                          Text('Booking Fee: MWK ${hostel.bookingFee}'),
-                          Text('Landlord Phone: ${hostel.landlordPhoneNumber}'),
-                          Text('Status: ${hostel.status}'),
-                          Text('Max People: ${hostel.maxPeople}'),
+                          TextButton(
+                            onPressed: () {
+                              // Navigate to hostel details page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HostelDetailPage(hostel: hostel),
+                                ),
+                              );
+                            },
+                            child: Text('See More'),
+                          ),
                         ],
                       ),
                     );
@@ -131,6 +136,12 @@ class _HostelPageState extends State<HostelPage> {
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Navigate to details
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HostelDetailPage(hostel: hostel),
+                          ),
+                        );
                       },
                     );
                   },
