@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:super_app/Pages/Home/Hostel_details.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/hostel_service.dart';
- // Import the detail page
+ 
 
 class HostelPage extends StatefulWidget {
   @override
@@ -21,9 +21,6 @@ class _HostelPageState extends State<HostelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Hostel Booking'),
-      ),
       body: FutureBuilder<List<Hostel>>(
         future: _hostels,
         builder: (context, snapshot) {
