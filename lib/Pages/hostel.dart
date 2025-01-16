@@ -23,7 +23,7 @@ class _HostelPageState extends State<HostelPage> {
       appBar: AppBar(
         title: Text('Hostels'),
         centerTitle: true,
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.orange,
       ),
       body: FutureBuilder<List<Hostel>>(
         future: _hostels,

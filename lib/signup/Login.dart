@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:super_app/Pages/BottomNavbar.dart';
 import 'package:super_app/Pages/cartpage.dart';
 import 'dart:convert';
-import '../Signup/Signup.dart'; // Adjust the import to point to your Signup page.
+
+import 'package:super_app/signup/Signup.dart';
+
 
 
 class LoginPage extends StatefulWidget {
