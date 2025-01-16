@@ -4,7 +4,7 @@ import 'package:super_app/models/hostel_model.dart';
 
 
 class HostelService {
-  static const String apiUrl = 'http://localhost:3000/hostels/allhouses';
+  static const String apiUrl = 'http://127.0.0.1:3000/hostels/allhouses';
 
   Future<List<Hostel>> fetchHostels() async {
     final response = await http.get(Uri.parse(apiUrl));

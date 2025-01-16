@@ -1,5 +1,6 @@
 // address.dart
 import 'package:flutter/material.dart';
+import 'package:super_app/Pages/hostel.dart';
 
 class AccomodationPage extends StatelessWidget {
   const AccomodationPage({super.key});
@@ -10,9 +11,7 @@ class AccomodationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Accomodation'),
       ),
-      body: const Center(
-        child: Text('find accomodation'),
-      ),
+      body: HostelPage()
     );
   }
 }
