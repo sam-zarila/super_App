@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:super_app/Pages/Home/Hostel_details.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/hostel_service.dart';
-import 'hostel_detail_page.dart';  // Import the detail page
+ // Import the detail page
 
 class HostelPage extends StatefulWidget {
   @override
