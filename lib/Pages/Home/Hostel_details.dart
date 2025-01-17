@@ -97,11 +97,7 @@ class HostelDetailPage extends StatelessWidget {
                       title: 'Booking Fee',
                       value: 'MWK ${hostel.bookingFee}',
                     ),
-                    DetailRow(
-                      icon: Icons.phone,
-                      title: 'Landlord Phone',
-                      value: hostel.landlordPhoneNumber,
-                    ),
+                   
                     DetailRow(
                       icon: Icons.info_outline,
                       title: 'Status',
