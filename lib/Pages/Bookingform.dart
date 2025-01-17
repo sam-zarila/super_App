@@ -59,7 +59,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Hostel - ${widget.hostel.houseName}'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,7 +67,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
           children: [
             Text(
               'Book Your Stay at ${widget.hostel.houseName}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
             ),
             SizedBox(height: 20),
             Form(
@@ -135,7 +135,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple, // Background color
+                            backgroundColor: Colors.green, // Background color
                             padding: EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
