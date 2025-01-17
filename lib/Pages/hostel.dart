@@ -57,7 +57,7 @@ class _HostelPageState extends State<HostelPage> {
                 ),
                 // Recommended Section
                 SectionHeader(
-                  title: 'Recommended Hostels',
+                  title: 'Recently Posted',
                   onSeeAll: () {},
                 ),
                 SizedBox(
@@ -167,7 +167,7 @@ class HostelCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(12.0)),
               child: Image.network(
-                hostel.image.isNotEmpty ? hostel.image : 'https://via.placeholder.com/150',
+                hostel.image.isNotEmpty ? hostel.image : 'https://i.pinimg.com/736x/64/12/10/64121069b5fc37e1fb979f1604ceb675.jpg',
                 width: 160,
                 height: 100,
                 fit: BoxFit.cover,
@@ -218,7 +218,7 @@ class HostelListTile extends StatelessWidget {
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
-          hostel.image.isNotEmpty ? hostel.image : 'https://via.placeholder.com/150',
+          hostel.image.isNotEmpty ? hostel.image : 'https://i.pinimg.com/736x/64/12/10/64121069b5fc37e1fb979f1604ceb675.jpg',
           width: 50,
           height: 50,
           fit: BoxFit.cover,
