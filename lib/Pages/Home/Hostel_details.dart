@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_app/models/hostel_model.dart';
+import '../Bookingform.dart';
 
 class HostelDetailPage extends StatelessWidget {
   final Hostel hostel;
@@ -27,7 +28,9 @@ class HostelDetailPage extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: Image.network(
-                  hostel.image.isNotEmpty ? hostel.image : 'https://via.placeholder.com/150',
+                  hostel.image.isNotEmpty
+                      ? hostel.image
+                      : 'https://via.placeholder.com/150',
                   width: double.infinity,
                   height: 250,
                   fit: BoxFit.cover,
@@ -120,14 +123,16 @@ class HostelDetailPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // Add contact landlord functionality here
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context)=> BookingFormPage(hostel: hostel)));
                   },
                   icon: Icon(Icons.phone),
                   label: Text('Book Now'),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     backgroundColor: Colors.teal,
-                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textStyle:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
