@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:super_app/Pages/Home/Messages.dart';
+import 'package:super_app/Pages/Home/Profilepage.dart';
 
 import 'homepage.dart';
 import '../Pages/marketPlace.dart';
@@ -27,6 +29,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
       MalawiSuperAppPage(),
       MarketPage(cartService: cartService), 
       Cartpage(cartService: cartService),
+      MessagePage(),
+      ProfilePage(),
 
       Placeholder(),
       Placeholder(),
