@@ -20,8 +20,8 @@ class PayChanguInlinePopup extends StatefulWidget {
     required this.callbackUrl,
     required this.returnUrl,
     required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.name,
+   
   }) : super(key: key);
 
   @override
@@ -118,8 +118,7 @@ class _PayChanguInlinePopupState extends State<PayChanguInlinePopup> {
                 "return_url": "${widget.returnUrl}",
                 "customer": {
                   "email": "${widget.email}",
-                  "first_name": "${widget.firstName}",
-                  "last_name": "${widget.lastName}"
+                  "first_name": "${widget.name}",
                 },
                 "customization": {
                   "title": "Payment Title",
