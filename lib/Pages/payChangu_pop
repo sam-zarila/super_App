@@ -10,7 +10,7 @@ class PayChanguInlinePopup extends StatefulWidget {
   final String returnUrl;
   final String email;
   final String name;
-  final String lastName;
+ 
 
   const PayChanguInlinePopup({
     Key? key,
