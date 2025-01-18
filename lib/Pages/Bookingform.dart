@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:super_app/Pages/payChangu_pop';
 import 'package:super_app/models/booking_model.dart';
 import 'package:super_app/models/hostel_model.dart';
-import 'package:super_app/services/booking_service.dart';
+import 'package:super_app/services/booking_service.dart'; // Adjust import path if needed
 
 class BookingFormPage extends StatefulWidget {
-  final Hostel hostel; // You pass the hostel details here.
+  final Hostel hostel;
 
   BookingFormPage({required this.hostel});
 
@@ -28,29 +29,31 @@ class _BookingFormPageState extends State<BookingFormPage> {
 
   Future<void> _submitBooking() async {
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() {
-        _isLoading = true;
-      });
-
       final bookingRequest = BookingRequest(
         boardingHouseId: widget.hostel.id,
         studentName: _nameController.text,
         emailAddress: _emailController.text,
         phoneNumber: _phoneController.text,
         bookingDate: _bookingDate.toIso8601String(),
-        price: widget.hostel.bookingFee, // Pass booking fee automatically.
+        price: widget.hostel.bookingFee,
       );
 
-      final bookingService = BookingService();
-      try {
-        await bookingService.createBooking(bookingRequest);
-      } catch (error) {
-        // Handle errors if necessary
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PayChanguInlinePopup(
+            publicKey:
+                'pub-live-cXmknoqlCfja0fhjW2XpE1qhfKWcBZs4', // Replace with actual key
+            amount: widget.hostel.bookingFee.toDouble(),
+            currency: 'MWK',
+            callbackUrl:
+                'https://your-callback-url.com', // Replace with actual URL
+            returnUrl: 'https://your-return-url.com', // Replace with actual URL
+            email: _emailController.text,
+            name: _nameController.text,
+          ),
+        ),
+      );
     }
   }
 
@@ -67,7 +70,11 @@ class _BookingFormPageState extends State<BookingFormPage> {
           children: [
             Text(
               'Book Your Stay at ${widget.hostel.houseName}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
             ),
             SizedBox(height: 20),
             Form(
@@ -135,14 +142,16 @@ class _BookingFormPageState extends State<BookingFormPage> {
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green, // Background color
+                            backgroundColor: Colors.green,
                             padding: EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                           onPressed: _submitBooking,
                           child: Text(
-                            'Confirm Booking',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                            'Confirm Booking & Pay',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
                           ),
                         ),
                 ],
