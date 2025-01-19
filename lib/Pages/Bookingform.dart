@@ -44,7 +44,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
           builder: (context) => PayChanguInlinePopup(
             publicKey:
                 'pub-live-cXmknoqlCfja0fhjW2XpE1qhfKWcBZs4', // Replace with actual key
-            amount: widget.hostel.bookingFee.toDouble(),
+            amount: double.parse(widget.hostel.bookingFee),
             currency: 'MWK',
             callbackUrl:
                 'https://your-callback-url.com', // Replace with actual URL
