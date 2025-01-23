@@ -5,26 +5,34 @@ import 'dart:convert';
 class BookingService {
   static const String _baseUrl = 'http://localhost:3000/accomodation/create';
 
-  Future<http.Response> createBooking(BookingRequest bookingRequest) async {
+  Future<Map<String, dynamic>> createBooking(BookingRequest bookingRequest) async {
     try {
       final response = await http.post(
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(bookingRequest.toJson()), // Ensure your model's `toJson()` method is implemented
+        body: json.encode(bookingRequest.toJson()),
       );
 
-      // Check for success (201 Created)
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('Booking Successful');
-        return response;
+        final responseBody = json.decode(response.body);
+
+        // Ensure response contains the necessary keys for payment initiation
+        if (responseBody['statusCode'] == 200 && responseBody['data'] != null) {
+          return {
+            'status': 'success',
+            'checkout_url': responseBody['data']['checkout_url'],
+          };
+        } else {
+          throw Exception('Payment initiation failed: Invalid response structure');
+        }
       } else {
-        // Handle failure (non-201 responses)
         print('Failed to book: ${response.body}');
         throw Exception('Failed to create booking: ${response.body}');
       }
     } catch (e) {
       print('Error: $e');
-      throw Exception('Error: $e'); // Rethrow the error so the UI can handle it
+      throw Exception('Error: $e');
     }
   }
 }

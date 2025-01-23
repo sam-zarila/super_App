@@ -27,35 +27,49 @@ class _BookingFormPageState extends State<BookingFormPage> {
     _bookingDate = DateTime.now(); // Default booking date
   }
 
-  Future<void> _submitBooking() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      final bookingRequest = BookingRequest(
-        boardingHouseId: widget.hostel.id,
-        studentName: _nameController.text,
-        emailAddress: _emailController.text,
-        phoneNumber: _phoneController.text,
-        bookingDate: _bookingDate.toIso8601String(),
-        price: widget.hostel.bookingFee,
-      );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PayChanguInlinePopup(
-            publicKey:
-                'pub-live-cXmknoqlCfja0fhjW2XpE1qhfKWcBZs4', // Replace with actual key
-            amount: double.parse(widget.hostel.bookingFee),
-            currency: 'MWK',
-            callbackUrl:
-                'https://your-callback-url.com', // Replace with actual URL
-            returnUrl: 'https://your-return-url.com', // Replace with actual URL
-            email: _emailController.text,
-            name: _nameController.text,
-          ),
-        ),
+Future<void> _submitBooking() async {
+  if (_formKey.currentState?.validate() ?? false) {
+    final bookingRequest = BookingRequest(
+      boardingHouseId: widget.hostel.id,
+      studentName: _nameController.text,
+      emailAddress: _emailController.text,
+      phoneNumber: _phoneController.text,
+      bookingDate: _bookingDate.toIso8601String(),
+      price: widget.hostel.bookingFee,
+    );
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Initiate booking and payment
+      final result = await BookingService().createBooking(bookingRequest);
+
+      // Open payment link
+      if (result['status'] == 'success' && result['checkout_url'] != null) {
+        final checkoutUrl = result['checkout_url'];
+        if (await canLaunch(checkoutUrl)) {
+          await launch(checkoutUrl);
+        } else {
+          throw 'Could not launch payment link.';
+        }
+      } else {
+        throw 'Failed to initiate payment.';
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $error')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +163,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                           ),
                           onPressed: _submitBooking,
                           child: Text(
-                            'Confirm Booking & Pay',
+                            ' PayNow',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
