@@ -3,7 +3,7 @@ import 'package:super_app/models/booking_model.dart';
 import 'dart:convert';
 
 class BookingService {
-  static const String _baseUrl = 'http://localhost:3000/accomodation/create';
+  static const String _baseUrl = 'http://127.0.0.1:3000/accomodation/create';
 
   Future<Map<String, dynamic>> createBooking(BookingRequest bookingRequest) async {
     try {
@@ -17,12 +17,17 @@ class BookingService {
         print('Booking Successful');
         final responseBody = json.decode(response.body);
 
-        // Ensure response contains the necessary keys for payment initiation
+        // Validate response structure and extract checkout URL
         if (responseBody['statusCode'] == 200 && responseBody['data'] != null) {
-          return {
-            'status': 'success',
-            'checkout_url': responseBody['data']['checkout_url'],
-          };
+          final checkoutUrl = responseBody['data']['checkout_url'];
+          if (checkoutUrl != null) {
+            return {
+              'status': 'success',
+              'checkout_url': checkoutUrl,
+            };
+          } else {
+            throw Exception('Payment initiation failed: Checkout URL missing');
+          }
         } else {
           throw Exception('Payment initiation failed: Invalid response structure');
         }
