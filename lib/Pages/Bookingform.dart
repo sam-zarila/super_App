@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:super_app/Pages/payChangu_pop.dart';
 import 'package:super_app/models/booking_model.dart';
 import 'package:super_app/models/hostel_model.dart';
-import 'package:super_app/services/booking_service.dart'; // Adjust import path if needed
+import 'package:super_app/services/booking_service.dart';
+import 'package:url_launcher/url_launcher.dart'; // Adjust import path if needed
 
 class BookingFormPage extends StatefulWidget {
   final Hostel hostel;
@@ -50,8 +51,8 @@ Future<void> _submitBooking() async {
       // Open payment link
       if (result['status'] == 'success' && result['checkout_url'] != null) {
         final checkoutUrl = result['checkout_url'];
-        if (await canLaunch(checkoutUrl)) {
-          await launch(checkoutUrl);
+        if (await canLaunchUrl(checkoutUrl)) {
+          await launchUrl(checkoutUrl);
         } else {
           throw 'Could not launch payment link.';
         }
