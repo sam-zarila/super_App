@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:super_app/Pages/payChangu_pop.dart';
 import 'package:super_app/models/booking_model.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/booking_service.dart';
-import 'package:url_launcher/url_launcher.dart'; // Adjust import path if needed
+import 'package:url_launcher/url_launcher.dart'; // For opening the payment URL
 
 class BookingFormPage extends StatefulWidget {
   final Hostel hostel;
@@ -28,36 +27,34 @@ class _BookingFormPageState extends State<BookingFormPage> {
     _bookingDate = DateTime.now(); // Default booking date
   }
 
-
-Future<void> _submitBooking() async {
+ Future<void> _submitBooking() async {
   if (_formKey.currentState?.validate() ?? false) {
-    final bookingRequest = BookingRequest(
-      boardingHouseId: widget.hostel.id,
-      studentName: _nameController.text,
-      emailAddress: _emailController.text,
-      phoneNumber: _phoneController.text,
-      bookingDate: _bookingDate.toIso8601String(),
-      price: widget.hostel.bookingFee,
-    );
-
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Initiate booking and payment
+      // Create a booking request
+      final bookingRequest = BookingRequest(
+        boardingHouseId: widget.hostel.id,
+        studentName: _nameController.text,
+        emailAddress: _emailController.text,
+        phoneNumber: _phoneController.text,
+        bookingDate: _bookingDate.toIso8601String(),
+        price: widget.hostel.bookingFee,
+      );
+
+      // Call the BookingService to initiate the booking
       final result = await BookingService().createBooking(bookingRequest);
 
-      // Open payment link
-      if (result['status'] == 'success' && result['checkout_url'] != null) {
-        final checkoutUrl = result['checkout_url'];
-        if (await canLaunchUrl(checkoutUrl)) {
-          await launchUrl(checkoutUrl);
-        } else {
-          throw 'Could not launch payment link.';
-        }
+      // Check if the booking was successful
+      if (result['status'] == 'success') {
+        final bookingDetails = result['bookingDetails'];
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Booking successful! Booking Number: ${bookingDetails['BookingNumber']}')),
+        );
       } else {
-        throw 'Failed to initiate payment.';
+        throw 'Booking failed.';
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -70,7 +67,6 @@ Future<void> _submitBooking() async {
     }
   }
 }
-
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +160,7 @@ Future<void> _submitBooking() async {
                           ),
                           onPressed: _submitBooking,
                           child: Text(
-                            ' PayNow',
+                            'Pay Now',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
