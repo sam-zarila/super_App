@@ -27,14 +27,14 @@ class _BookingFormPageState extends State<BookingFormPage> {
     _bookingDate = DateTime.now(); // Default booking date
   }
 
- Future<void> _submitBooking() async {
+Future<void> _submitBooking() async {
   if (_formKey.currentState?.validate() ?? false) {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Create a booking request
+      // Step 1: Create a booking
       final bookingRequest = BookingRequest(
         boardingHouseId: widget.hostel.id,
         studentName: _nameController.text,
@@ -44,15 +44,35 @@ class _BookingFormPageState extends State<BookingFormPage> {
         price: widget.hostel.bookingFee,
       );
 
-      // Call the BookingService to initiate the booking
-      final result = await BookingService().createBooking(bookingRequest);
+      final bookingResult = await BookingService().createBooking(bookingRequest);
 
       // Check if the booking was successful
-      if (result['status'] == 'success') {
-        final bookingDetails = result['bookingDetails'];
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Booking successful! Booking Number: ${bookingDetails['BookingNumber']}')),
+      if (bookingResult['status'] == 'success') {
+        final bookingDetails = bookingResult['bookingDetails'];
+
+        // Step 2: Initiate payment
+        final paymentResult = await BookingService().initiatePayment(
+          amount: widget.hostel.bookingFee,
+          currency: 'MWK',
+          email: _emailController.text,
+          txRef: 'tx_${DateTime.now().millisecondsSinceEpoch}', // Unique transaction reference
+          phoneNumber: _phoneController.text,
+          name: _nameController.text,
         );
+
+        // Check if the payment initiation was successful
+        if (paymentResult['status'] == 'success' && paymentResult['checkout_url'] != null) {
+          final checkoutUrl = Uri.parse(paymentResult['checkout_url']);
+
+          // Open the payment URL in a browser
+          if (await canLaunchUrl(checkoutUrl)) {
+            await launchUrl(checkoutUrl);
+          } else {
+            throw 'Could not launch payment link.';
+          }
+        } else {
+          throw 'Failed to initiate payment.';
+        }
       } else {
         throw 'Booking failed.';
       }
