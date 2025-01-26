@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_app/Pages/payment_webview.dart';
 import 'package:super_app/models/booking_model.dart';
 import 'package:super_app/models/hostel_model.dart';
 import 'package:super_app/services/booking_service.dart';
@@ -26,7 +27,6 @@ class _BookingFormPageState extends State<BookingFormPage> {
     super.initState();
     _bookingDate = DateTime.now(); // Default booking date
   }
-
 Future<void> _submitBooking() async {
   if (_formKey.currentState?.validate() ?? false) {
     setState(() {
@@ -62,14 +62,14 @@ Future<void> _submitBooking() async {
 
         // Check if the payment initiation was successful
         if (paymentResult['status'] == 'success' && paymentResult['checkout_url'] != null) {
-          final checkoutUrl = Uri.parse(paymentResult['checkout_url']);
+          final checkoutUrl = paymentResult['checkout_url'];
 
-          // Open the payment URL in a browser
-          if (await canLaunchUrl(checkoutUrl)) {
-            await launchUrl(checkoutUrl);
-          } else {
-            throw 'Could not launch payment link.';
-          }
+          // Open the payment URL in a WebView
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PaymentWebView(checkoutUrl: checkoutUrl),
+            ),
+          );
         } else {
           throw 'Failed to initiate payment.';
         }
