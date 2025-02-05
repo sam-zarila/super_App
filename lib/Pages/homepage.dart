@@ -17,6 +17,7 @@ import 'package:super_app/Pages/random.dart';
 import 'package:super_app/Pages/seller.dart';
 import 'package:super_app/Pages/social.dart';
 import 'package:super_app/Pages/utility.dart';
+import 'package:super_app/services/cart_services.dart';
 import '../Pages/Home/Latest_page.dart';
 
 class MalawiSuperAppPage extends StatelessWidget {
@@ -228,8 +229,8 @@ class MalawiSuperAppPage extends StatelessWidget {
             } else if (categoryName == 'Food') {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const FoodPage()),
-              );
+                 MaterialPageRoute(builder: (context) => FoodPage()),
+               );
             } else if (categoryName == 'Mobile Money') {
               Navigator.push(
                 context,
