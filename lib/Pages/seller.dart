@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -147,8 +147,7 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
   bool _termsAccepted = false;
 
   Future<void> _submitApplication() async {
-    final url = Uri.parse(
-        'http://127.0.0.1:3000/sellers/create'); // Replace with your API endpoint
+    final url = Uri.parse('http://127.0.0.1:3000/sellers/create'); // Replace with your API endpoint
 
     // NationalID is a string (no conversion needed)
     final nationalId = _nationalIdController.text;
@@ -160,12 +159,12 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
     final body = json.encode({
       'FirstName': _firstNameController.text,
       'Surname': _surnameController.text,
-      'NationalID': nationalId, // No conversion, keep as a string
+      'NationalID': nationalId,
       'BusinessName': _businessNameController.text,
       'PhoneNumber': _phoneNumberController.text,
       'Address': _addressController.text,
       'BusinessDescription': _businessDescriptionController.text,
-      'ApplicationDate': currentDate, // Automatically filled with current date
+      'ApplicationDate': currentDate,
     });
 
     try {
@@ -176,13 +175,13 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _showSuccessDialog('Application submitted successfully!');
+        _showToast('Application submitted successfully!');
         _clearForm();
       } else {
-        _showErrorDialog('Failed to submit application: ${response.body}');
+        _showToast('Failed to submit application: ${response.body}');
       }
     } catch (error) {
-      _showErrorDialog('An error occurred: $error');
+      _showToast('An error occurred: $error');
     }
   }
 
@@ -200,43 +199,14 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
     });
   }
 
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Success'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
@@ -256,12 +226,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // First Name
-              TextFormField(
+              _buildTextField(
                 controller: _firstNameController,
-                decoration: const InputDecoration(
-                  labelText: 'First Name',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'First Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your first name';
@@ -272,12 +239,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Surname
-              TextFormField(
+              _buildTextField(
                 controller: _surnameController,
-                decoration: const InputDecoration(
-                  labelText: 'Surname',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Surname',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your surname';
@@ -288,12 +252,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // National ID
-              TextFormField(
+              _buildTextField(
                 controller: _nationalIdController,
-                decoration: const InputDecoration(
-                  labelText: 'National ID',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'National ID',
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -305,12 +266,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Business Name
-              TextFormField(
+              _buildTextField(
                 controller: _businessNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Business Name',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Business Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your Business Name';
@@ -321,12 +279,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Phone Number
-              TextFormField(
+              _buildTextField(
                 controller: _phoneNumberController,
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Phone Number',
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -338,12 +293,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Address
-              TextFormField(
+              _buildTextField(
                 controller: _addressController,
-                decoration: const InputDecoration(
-                  labelText: 'Address',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Address',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your address';
@@ -354,12 +306,9 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Business Description
-              TextFormField(
+              _buildTextField(
                 controller: _businessDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Business Description',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Business Description',
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -404,17 +353,20 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
                     if (_formKey.currentState!.validate() && _termsAccepted) {
                       _submitApplication();
                     } else if (!_termsAccepted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'You must accept the terms and conditions')),
-                      );
+                      _showToast('You must accept the terms and conditions');
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Submit Application'),
+                  child: const Text(
+                    'Submit Application',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
                 ),
               ),
             ],
@@ -423,38 +375,33 @@ class _ApplyNowPageState extends State<ApplyNowPage> {
       ),
     );
   }
-}
 
-
-class SellersApplicationFormService {
-  final String _baseUrl = 'http://127.0.0.1:3000/sellersapplicationform';
-
-  Future<bool> postSellersApplicationForm(Map<String, dynamic> formData) async {
-    try {
-      final uri = Uri.parse(_baseUrl);
-
-      final response = await http.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(formData),
-      );
-
-      if (response.statusCode == 201) {
-        print('Application submitted successfully');
-        return true;
-      } else {
-        throw Exception('Failed to submit form: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
-      throw e;
-    }
+  // Helper method to build text fields
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      ),
+      validator: validator,
+    );
   }
 }
 
+
 // drivers form
-
-
 
 class DriverApplyNowPage extends StatefulWidget {
   @override
@@ -475,7 +422,6 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
   final TextEditingController _businessDescriptionController = TextEditingController();
 
   File? _carImage;
-
   bool _termsAccepted = false;
 
   Future<void> _pickImage(ImageSource source) async {
@@ -516,19 +462,13 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
       final response = await request.send();
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application submitted successfully!')),
-        );
+        _showToast('Application submitted successfully!');
         _clearForm();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to submit application: ${response.reasonPhrase}')),
-        );
+        _showToast('Failed to submit application: ${response.reasonPhrase}');
       }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $error')),
-      );
+      _showToast('An error occurred: $error');
     }
   }
 
@@ -548,6 +488,17 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
     });
   }
 
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -564,12 +515,9 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // First Name
-              TextFormField(
+              _buildTextField(
                 controller: _firstNameController,
-                decoration: const InputDecoration(
-                  labelText: 'First Name',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'First Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your first name';
@@ -580,12 +528,9 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Surname
-              TextFormField(
+              _buildTextField(
                 controller: _surnameController,
-                decoration: const InputDecoration(
-                  labelText: 'Surname',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Surname',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your surname';
@@ -596,12 +541,9 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // National ID
-              TextFormField(
+              _buildTextField(
                 controller: _nationalIdController,
-                decoration: const InputDecoration(
-                  labelText: 'National ID',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'National ID',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your National ID';
@@ -612,12 +554,9 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Registration Number
-              TextFormField(
+              _buildTextField(
                 controller: _registrationNumberController,
-                decoration: const InputDecoration(
-                  labelText: 'Registration Number',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Registration Number',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the vehicle registration number';
@@ -628,12 +567,9 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
               const SizedBox(height: 16.0),
 
               // Driver License Number
-              TextFormField(
+              _buildTextField(
                 controller: _driverLicenseNumberController,
-                decoration: const InputDecoration(
-                  labelText: 'Driver License Number',
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Driver License Number',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your driver license number';
@@ -704,21 +640,45 @@ class _DriverApplyNowPageState extends State<DriverApplyNowPage> {
                     if (_formKey.currentState!.validate() && _termsAccepted) {
                       _submitApplication();
                     } else if (!_termsAccepted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Accept the terms')),
-                      );
+                      _showToast('You must accept the terms and conditions');
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Submit Application'),
+                  child: const Text(
+                    'Submit Application',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Helper method to build text fields
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      ),
+      validator: validator,
     );
   }
 }
