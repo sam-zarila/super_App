@@ -2,25 +2,27 @@ class MarketplaceDetailModel {
   final int id;
   final String name;
   final String image;
-  final int price;
+  final double price;
   final String description;
+  final String? comment;
 
   MarketplaceDetailModel({
     required this.id,
     required this.name,
     required this.image,
     required this.price,
-    required this.description
+    required this.description,
+    this.comment,
   });
 
-  // Factory method to create an object from JSON response
   factory MarketplaceDetailModel.fromJson(Map<String, dynamic> json) {
     return MarketplaceDetailModel(
-      id: json['id'],
-      name: json['name'],
-      image: json['image'],
-      price: json['price'],
-       description: json['description'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'Unknown Item',
+      image: json['image'] ?? 'https://via.placeholder.com/300', // Placeholder image
+      price: (json['price'] ?? 0).toDouble(),
+      description: json['description'] ?? 'No description available.',
+      comment: json['comment'] ?? '',
     );
   }
 }

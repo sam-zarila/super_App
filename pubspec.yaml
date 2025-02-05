@@ -18,27 +18,29 @@ dependencies:
   http: ^1.2.2
   image_picker: ^1.1.2
   intl: ^0.20.1
-
+  firebase_core: ^3.0.0  # Upgraded to match `firebase_auth_mocks` requirements
+  firebase_auth: ^5.4.1  
+  firebase_auth_web: ^5.9.0  
   cloud_firestore: ^5.6.0
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.0.0
   shared_preferences: ^2.1.0
-  webview_flutter: ^4.10.0 # Updated
+  webview_flutter: ^4.10.0 
   url_launcher: ^6.2.6
-  webview_flutter_android: ^ 4.3.1
+  firebase_storage: ^12.4.1
+  flutter_secure_storage: ^9.2.4
+  webview_flutter_android: ^4.3.1
   webview_flutter_wkwebview: ^3.17.0
- 
-
- 
+  fluttertoast: ^8.2.10
 
 # Development-only dependencies
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  firebase_auth_mocks: ^0.14.1
+  firebase_auth_mocks: ^0.14.1 # Make sure this matches firebase_core version
 
-# To resolve version conflicts if any
+# Resolve version conflicts
 dependency_overrides:
   firebase_storage_web: ^3.6.22
 
@@ -55,7 +57,3 @@ flutter:
     - assets/happy.jpg
     - assets/uber-cabs-1024x576.webp
     - assets/Queens-Tavern-Steak.jpg
-
-# Additional comments:
-# - Use `flutter pub upgrade --major-versions` to ensure all dependencies are updated to the latest compatible versions.
-# - To clean and rebuild the project, run `flutter clean` followed by `flutter pub get`.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:super_app/Pages/Home/Messages.dart';
-import 'package:super_app/Pages/Home/Profilepage.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../Pages/Home/Messages.dart';
+import '../Pages/Home/Profilepage.dart';
 import 'homepage.dart';
 import '../Pages/marketPlace.dart';
 import '../services/cart_services.dart';
@@ -16,10 +16,7 @@ class Bottomnavbar extends StatefulWidget {
 
 class _BottomnavbarState extends State<Bottomnavbar> {
   int _selectedIndex = 0;
-
-  // Create an instance of CartService
   final CartService cartService = CartService('http://127.0.0.1:3000/cart');
-
   late final List<Widget> _pages;
 
   @override
@@ -27,24 +24,21 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     super.initState();
     _pages = [
       MalawiSuperAppPage(),
-      MarketPage(cartService: cartService), 
-      Cartpage(cartService: cartService),
+      MarketPage(cartService: cartService),
+      CartPage(cartService: cartService),
       MessagePage(),
       ProfilePage(),
-
-      Placeholder(),
-      Placeholder(),
-      Placeholder(),
     ];
   }
 
-  // Get the logged-in user's UID (user ID) from Firebase Authentication
- 
-
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (FirebaseAuth.instance.currentUser == null) {
+      _showAuthDialog();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -95,10 +89,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     );
   }
 
-  BottomNavigationBarItem _buildBottomNavItem(
-      IconData icon, String label, int index) {
+  BottomNavigationBarItem _buildBottomNavItem(IconData icon, String label, int index) {
     final bool isSelected = _selectedIndex == index;
-
     return BottomNavigationBarItem(
       icon: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -115,6 +107,60 @@ class _BottomnavbarState extends State<Bottomnavbar> {
         ),
       ),
       label: label,
+    );
+  }
+
+  void _showAuthDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Login Required",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "You need to log in or sign up to continue,only quick services can be accessed without loggin in",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text("Login"),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
+                      child: Text("Sign Up"),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("Cancel", style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

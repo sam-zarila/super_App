@@ -15,7 +15,7 @@ class HostelDetailPage extends StatelessWidget {
           hostel.houseName,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.orange,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -26,11 +26,11 @@ class HostelDetailPage extends StatelessWidget {
             children: [
               // Hostel Image
               ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(16.0),
                 child: Image.network(
                   hostel.image.isNotEmpty
                       ? hostel.image
-                      : 'https://via.placeholder.com/150',
+                      : 'https://via.placeholder.com/300',
                   width: double.infinity,
                   height: 250,
                   fit: BoxFit.cover,
@@ -44,7 +44,7 @@ class HostelDetailPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.teal,
+                  color: Colors.orange,
                 ),
               ),
 
@@ -55,7 +55,7 @@ class HostelDetailPage extends StatelessWidget {
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(16.0),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
@@ -97,7 +97,6 @@ class HostelDetailPage extends StatelessWidget {
                       title: 'Booking Fee',
                       value: 'MWK ${hostel.bookingFee}',
                     ),
-                   
                     DetailRow(
                       icon: Icons.info_outline,
                       title: 'Status',
@@ -112,9 +111,9 @@ class HostelDetailPage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 16),
+              SizedBox(height: 20),
 
-              // Contact Button
+              // Book Now Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -122,13 +121,18 @@ class HostelDetailPage extends StatelessWidget {
                     Navigator.push(
                         context, MaterialPageRoute(builder: (context)=> BookingFormPage(hostel: hostel)));
                   },
-                  icon: Icon(Icons.phone),
-                  label: Text('Book Now'),
+                  icon: Icon(Icons.payment, color: Colors.white),
+                  label: Text(
+                    'Book Now',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                    backgroundColor: Colors.teal,
-                    textStyle:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    textStyle: TextStyle(fontSize: 16),
                   ),
                 ),
               ),
@@ -157,7 +161,7 @@ class DetailRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.teal, size: 20),
+          Icon(icon, color: Colors.orange, size: 22),
           SizedBox(width: 12),
           Expanded(
             child: Text(

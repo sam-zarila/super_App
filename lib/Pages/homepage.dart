@@ -42,7 +42,7 @@ class MalawiSuperAppPage extends StatelessWidget {
           const SizedBox(width: 10),
         ],
       ),
-      drawer: _buildDrawer(context),
+    //  
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -56,7 +56,7 @@ class MalawiSuperAppPage extends StatelessWidget {
              const Center(
 
               child:  Text(
-                'Discover Our Services',
+                'Discover Our Quick Services',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -89,105 +89,6 @@ class MalawiSuperAppPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.green,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.orange),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, color: Colors.green, size: 30),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Hello, User',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                Text(
-                  'user@example.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.payment, color: Colors.white),
-            title: const Text('To Pay', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ToPayPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.local_shipping, color: Colors.white),
-            title: const Text('To Ship', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ToShipPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.move_to_inbox, color: Colors.white),
-            title:
-                const Text('To Receive', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ToReceivePage()),
-              );
-            },
-          ),
-          ListTile(
-            leading:
-                const Icon(Icons.replay_circle_filled, color: Colors.white),
-            title: const Text('Refund', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ToRefundPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.location_on, color: Colors.white),
-            title:
-                const Text('My Address', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddressPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-            title:
-                const Text('Settings', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.white),
-            title: const Text('Logout', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildSearchBar() {
     return Row(
@@ -195,7 +96,7 @@ class MalawiSuperAppPage extends StatelessWidget {
         Expanded(
           child: TextField(
             decoration: InputDecoration(
-              hintText: "Search...",
+              hintText: "Search for quick services...",
               filled: true,
               fillColor: Colors.grey[200],
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
@@ -378,10 +279,8 @@ class MalawiSuperAppPage extends StatelessWidget {
 
 Widget _buildShoeSection() {
   final List<Map<String, String>> shoeData = [
-    {'image': 'assets/shoes/airforce.jpg', 'name': 'iPhones', 'price': '850,000'},
-    {'image': 'assets/shoes/timberland.jpg', 'name': 'Timberland', 'price': '150,000'},
-    {'image': 'assets/shoes/converse.jpg', 'name': 'Classic Jersey', 'price': '30,0000'},
-    {'image': 'assets/shoes/airmax.jpg', 'name': 'Air Max', 'price': '450,000'},
+    
+   
   ];
 
   return Column(

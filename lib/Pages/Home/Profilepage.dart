@@ -1,14 +1,127 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:super_app/Pages/ToRefund.dart';
+import 'package:super_app/Pages/Topay.dart';
+import 'package:super_app/Pages/Toreceive.dart';
+import 'package:super_app/Pages/Toship.dart';
+import 'package:super_app/Pages/address.dart';
 import 'package:super_app/models/marketplace.model.dart';
 import 'package:super_app/services/marketplace.service.dart';
+import 'package:super_app/signup/Login.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final MarketplaceService marketplaceService = MarketplaceService();
+  String fullName = "Loading...";
+  String email = "Loading...";
 
-  ProfilePage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
 
-  Future<List<MarketPlaceModel>> fetchMarketplaceData() async {
-    return await marketplaceService.fetchMarketItems();
+  Future<void> _fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+
+      if (userDoc.exists) {
+        setState(() {
+          fullName = userDoc['fullName'] ?? 'Guest User';
+          email = userDoc['email'] ?? 'No Email';
+        });
+      } else {
+        setState(() {
+          fullName = 'Guest User';
+          email = 'No Email';
+        });
+      }
+    }
+  }
+
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      backgroundColor: Colors.green,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(color: Colors.orange),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, color: Colors.green, size: 30),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  fullName,
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                Text(
+                  email,
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.payment, color: Colors.white),
+            title: const Text('To Pay', style: TextStyle(color: Colors.white)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ToPayPage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_shipping, color: Colors.white),
+            title: const Text('To Ship', style: TextStyle(color: Colors.white)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ToShipPage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.move_to_inbox, color: Colors.white),
+            title: const Text('To Receive', style: TextStyle(color: Colors.white)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ToReceivePage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.replay_circle_filled, color: Colors.white),
+            title: const Text('Refund', style: TextStyle(color: Colors.white)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ToRefundPage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.location_on, color: Colors.white),
+            title: const Text('My Address', style: TextStyle(color: Colors.white)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddressPage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings, color: Colors.white),
+            title: const Text('Settings', style: TextStyle(color: Colors.white)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.white),
+            title: const Text('Logout', style: TextStyle(color: Colors.white)),
+            onTap: () => _logout(context),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -20,19 +133,19 @@ class ProfilePage extends StatelessWidget {
         elevation: 0,
         title: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               backgroundColor: Colors.orange,
               child: Icon(Icons.person, color: Colors.white),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'crossby5612',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  fullName,
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                 ),
-                Text(
+                const Text(
                   'Open shop',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
@@ -42,87 +155,45 @@ class ProfilePage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
+            icon: const Icon(Icons.settings, color: Colors.black),
             onPressed: () {},
           ),
         ],
       ),
+      drawer: _buildDrawer(context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // My Orders Section
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'My Orders',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildOrderIcon(Icons.payment, 'To Pay', 0),
-                      _buildOrderIcon(Icons.local_shipping, 'To Ship', 6),
-                      _buildOrderIcon(Icons.receipt, 'To Receive', 4),
-                      _buildOrderIcon(Icons.rate_review, 'To Review', 0),
-                      _buildOrderIcon(Icons.money, 'Refund', 0),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            // Options Section
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildOptionIcon(Icons.flight_takeoff, 'Overseas Ship'),
-                  _buildOptionIcon(Icons.help_center, 'Help Center'),
-                  _buildOptionIcon(Icons.star, 'Collect'),
-                  _buildOptionIcon(Icons.card_giftcard, 'Voucher'),
-                  _buildOptionIcon(Icons.history, 'Footprints'),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            // Listings Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                'Marketplace',
+                'Latest Arrivals',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             FutureBuilder<List<MarketPlaceModel>>(
-              future: fetchMarketplaceData(),
+              future: marketplaceService.fetchLatestArrivals(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(child: Text("Failed to load marketplace data"));
+                  return const Center(child: Text("Failed to load latest arrivals"));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text("No items available"));
+                  return const Center(child: Text("No latest arrivals available"));
                 } else {
                   final items = snapshot.data!;
                   return GridView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                       childAspectRatio: 0.8,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
@@ -138,76 +209,15 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderIcon(IconData icon, String label, int count) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Icon(icon, size: 30, color: Colors.black),
-            if (count > 0)
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    '$count',
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        SizedBox(height: 5),
-        Text(label, style: TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-
-  Widget _buildOptionIcon(IconData icon, String label) {
-    return Column(
-      children: [
-        Icon(icon, size: 30, color: Colors.black),
-        SizedBox(height: 5),
-        Text(label, style: TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-
   Widget _buildListingCard(MarketPlaceModel item) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: EdgeInsets.all(8),
+    return Card(
+      elevation: 3,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 110,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: NetworkImage(item.image),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            item.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-          SizedBox(height: 5),
-          Text(
-            'MK${item.price}',
-            style: TextStyle(color: Colors.red, fontSize: 12),
+          //Image.network(item.imageUrl, height: 100, fit: BoxFit.cover),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+           // child: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),

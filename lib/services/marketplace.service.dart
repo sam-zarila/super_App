@@ -38,4 +38,6 @@ class MarketplaceService {
       throw Exception('An unexpected error occurred while fetching market items: $e');
     }
   }
+
+  fetchLatestArrivals() {}
 }

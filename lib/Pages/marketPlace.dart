@@ -92,7 +92,8 @@ class _MarketPageState extends State<MarketPage> {
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
@@ -169,6 +170,7 @@ class _MarketPageState extends State<MarketPage> {
     );
   }
 
+  //card
   Widget _buildMarketItem(MarketPlaceModel item) {
     return Container(
       decoration: BoxDecoration(
@@ -186,14 +188,12 @@ class _MarketPageState extends State<MarketPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(15),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
             child: Image.network(
               item.image,
-              height: 120,
+              height: 140, // Adjust height
               width: double.infinity,
-              fit: BoxFit.cover,
+              fit: BoxFit.cover, // Ensure the image fits well
             ),
           ),
           Padding(
@@ -211,7 +211,7 @@ class _MarketPageState extends State<MarketPage> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Text(
                   "MWK ${item.price}",
                   style: const TextStyle(
@@ -220,23 +220,54 @@ class _MarketPageState extends State<MarketPage> {
                     color: Colors.green,
                   ),
                 ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle add to cart functionality
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+          // const Spacer(), // Push buttons to the bottom
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // Space between buttons
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle add to cart functionality
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    child: const Text("AddCart"),
                   ),
-                  child: const Text("Add to Cart"),
+                ),
+                const SizedBox(width: 10), // Spacing between buttons
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailsPage(
+                                    itemId: item.id,
+                                    cartService: widget.cartService,
+                                  )));
+                      // Handle buy now functionality
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text("BuyNow"),
+                  ),
                 ),
               ],
             ),
