@@ -32,10 +32,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      // For Windows, use default creation parameters.
-      params = const PlatformWebViewControllerCreationParams();
     } else {
+      // If running on any other platform (like Windows), throw an error.
       throw UnsupportedError('Unsupported platform: ${defaultTargetPlatform}');
     }
 
@@ -81,7 +79,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
 
     // Android-specific settings (if needed)
     if (_webViewController.platform is AndroidWebViewController) {
-      final androidController = _webViewController.platform as AndroidWebViewController;
+      final androidController =
+          _webViewController.platform as AndroidWebViewController;
       androidController.setBackgroundColor(Colors.transparent);
     }
   }
