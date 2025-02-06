@@ -27,10 +27,13 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
-    } else  if(){
+    } else if(WebViewPlatform.instance is AndroidWebViewPlatform){
       // Android-specific configuration
       params = const PlatformWebViewControllerCreationParams();
     }
+     else{
+
+     }
 
     _webViewController = WebViewController.fromPlatformCreationParams(params);
 
