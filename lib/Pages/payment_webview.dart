@@ -17,48 +17,61 @@ class PaymentWebView extends StatefulWidget {
 class _PaymentWebViewState extends State<PaymentWebView> {
   WebViewController? _webViewController; // For Android & iOS
   WebviewController? _windowsWebViewController; // For Windows
+  bool isLoading = true; // Track loading state
 
   @override
   void initState() {
     super.initState();
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      // Android-specific configuration
-      final params = AndroidWebViewControllerCreationParams();
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      // Mobile Configuration (Android & iOS)
+      final params = defaultTargetPlatform == TargetPlatform.android
+          ? AndroidWebViewControllerCreationParams()
+          : WebKitWebViewControllerCreationParams(
+              allowsInlineMediaPlayback: true,
+              mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+            );
+
       _webViewController = WebViewController.fromPlatformCreationParams(params);
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      // iOS-specific configuration
-      final params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-      _webViewController = WebViewController.fromPlatformCreationParams(params);
+      _setupWebView();
     } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      // Windows-specific configuration
+      // Windows Configuration
       _windowsWebViewController = WebviewController()
         ..initialize().then((_) {
           _windowsWebViewController?.loadUrl(widget.checkoutUrl);
-          setState(() {}); // Refresh UI after initialization
+          setState(() {
+            isLoading = false;
+          });
         });
     } else {
       throw UnsupportedError('Unsupported platform: $defaultTargetPlatform');
     }
+  }
 
-    // Configure the WebViewController if not on Windows
+  void _setupWebView() {
     _webViewController?.setJavaScriptMode(JavaScriptMode.unrestricted);
     _webViewController?.setNavigationDelegate(
       NavigationDelegate(
         onProgress: (int progress) {
-          print('Loading: $progress%');
+          setState(() {
+            isLoading = progress < 100;
+          });
         },
         onPageStarted: (String url) {
-          print('Page started loading: $url');
+          setState(() {
+            isLoading = true;
+          });
         },
         onPageFinished: (String url) {
-          print('Page finished loading: $url');
+          setState(() {
+            isLoading = false;
+          });
         },
         onNavigationRequest: (NavigationRequest request) {
-          print('Navigating to: ${request.url}');
+          print("Navigating to: ${request.url}");
+          
+          // Detect PayChangu transaction status
           if (request.url.contains('payment-success')) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -72,6 +85,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
             );
             return NavigationDecision.prevent;
           }
+
           return NavigationDecision.navigate;
         },
       ),
@@ -84,11 +98,19 @@ class _PaymentWebViewState extends State<PaymentWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Complete Payment')),
-      body: defaultTargetPlatform == TargetPlatform.windows
-          ? _windowsWebViewController != null
-              ? Webview(_windowsWebViewController!) // Windows WebView
-              : const Center(child: CircularProgressIndicator())
-          : WebViewWidget(controller: _webViewController!), // Mobile WebView
+      body: Stack(
+        children: [
+          defaultTargetPlatform == TargetPlatform.windows
+              ? _windowsWebViewController != null
+                  ? Webview(_windowsWebViewController!)
+                  : const Center(child: CircularProgressIndicator())
+              : WebViewWidget(controller: _webViewController!), // Mobile WebView
+          if (isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
     );
   }
 }
